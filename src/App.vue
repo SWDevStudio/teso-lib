@@ -83,27 +83,17 @@
               tabindex="0"
               class="dropdown-content menu z-40 mt-2 w-52 gap-1 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
             >
-              <li>
-                <label class="flex cursor-pointer items-center gap-3" @click="closeMenu">
+              <li v-for="option in themeOptions" :key="option.value">
+                <label class="flex cursor-pointer items-center gap-3">
                   <input
+                    v-model="theme"
                     type="radio"
                     name="theme-dropdown"
-                    class="theme-controller radio radio-sm radio-primary"
-                    value="elderscrolls"
+                    class="radio radio-sm radio-primary"
+                    :value="option.value"
+                    @change="closeMenu"
                   />
-                  <span>Древний фолиант</span>
-                </label>
-              </li>
-              <li>
-                <label class="flex cursor-pointer items-center gap-3" @click="closeMenu">
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    class="theme-controller radio radio-sm radio-primary"
-                    value="parchment"
-                    checked
-                  />
-                  <span>Пергамент</span>
+                  <span>{{ option.label }}</span>
                 </label>
               </li>
             </ul>
@@ -163,10 +153,12 @@
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { navLinks } from '@/router'
+import { useTheme } from '@/composables/useTheme'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiConfirm from '@/components/UiConfirm.vue'
 
 const drawerOpen = ref(false)
+const { theme, themeOptions } = useTheme()
 
 function closeDrawer() {
   drawerOpen.value = false
