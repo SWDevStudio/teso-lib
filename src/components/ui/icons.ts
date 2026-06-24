@@ -6,6 +6,7 @@ import IconCharacters from '~icons/game-icons/elf-helmet'
 import IconNotes from '~icons/game-icons/scroll-quill'
 import IconCodex from '~icons/game-icons/open-book'
 import IconLore from '~icons/game-icons/spell-book'
+import IconQuenta from '~icons/game-icons/scroll-unfurled'
 import IconGood from '~icons/game-icons/holy-symbol'
 import IconBad from '~icons/game-icons/daemon-skull'
 import IconTitle from '~icons/game-icons/laurel-crown'
@@ -34,6 +35,7 @@ export const icons = {
   notes: IconNotes,
   codex: IconCodex,
   lore: IconLore,
+  quenta: IconQuenta,
   good: IconGood,
   bad: IconBad,
   title: IconTitle,

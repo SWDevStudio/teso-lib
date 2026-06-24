@@ -11,6 +11,7 @@ export const navLinks: NavLink[] = [
   { name: 'pantheon', label: 'Пантеон' },
   { name: 'characters', label: 'Персонажи' },
   { name: 'notes', label: 'Заметки' },
+  { name: 'quentas', label: 'Квенты' },
 ]
 
 const routes: RouteRecordRaw[] = [
@@ -38,6 +39,11 @@ const routes: RouteRecordRaw[] = [
     path: '/notes',
     name: 'notes',
     component: () => import('@/pages/NotesPage.vue'),
+  },
+  {
+    path: '/quentas',
+    name: 'quentas',
+    component: () => import('@/pages/QuentasPage.vue'),
   },
 ]
 
