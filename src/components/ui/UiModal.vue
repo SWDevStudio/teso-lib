@@ -10,7 +10,7 @@
       <div ref="box" tabindex="-1" class="modal-box max-h-[85vh] focus:outline-none">
         <header v-if="title || slots.header" class="mb-4 flex items-start justify-between gap-4">
           <h3 class="text-lg font-semibold">{{ title }}</h3>
-          <UiButton variant="ghost" size="sm" aria-label="Закрыть" @click="close">
+          <UiButton variant="ghost" icon aria-label="Закрыть" @click="close">
             <UiIcon name="close" :size="22" />
           </UiButton>
         </header>

@@ -15,6 +15,7 @@ const props = withDefaults(
     type?: 'button' | 'submit' | 'reset'
     block?: boolean
     outline?: boolean
+    icon?: boolean
     disabled?: boolean
     loading?: boolean
   }>(),
@@ -27,5 +28,6 @@ const classes = computed(() => [
   props.size === 'sm' ? 'btn-sm' : props.size === 'lg' ? 'btn-lg' : '',
   props.block ? 'btn-block' : '',
   props.outline ? 'btn-outline' : '',
+  props.icon ? 'btn-square min-h-11 min-w-11' : '',
 ])
 </script>

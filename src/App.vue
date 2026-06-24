@@ -10,7 +10,7 @@
           <div
             tabindex="0"
             role="button"
-            class="btn btn-ghost btn-sm px-2"
+            class="btn btn-ghost btn-sm min-h-11 min-w-11 px-2"
             aria-label="Меню"
             aria-haspopup="menu"
             aria-controls="mobile-menu"
@@ -68,7 +68,7 @@
           <div
             tabindex="0"
             role="button"
-            class="btn btn-ghost btn-sm gap-2"
+            class="btn btn-ghost btn-sm min-h-11 gap-2"
             aria-label="Выбор темы"
             aria-haspopup="menu"
             aria-controls="theme-menu"

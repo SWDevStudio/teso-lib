@@ -34,13 +34,13 @@
         <template #actions>
           <UiButton
             variant="ghost"
-            size="sm"
+            icon
             aria-label="Изменить"
             @click="openEdit(note.id, note.title, note.body)"
           >
             <UiIcon name="edit" />
           </UiButton>
-          <UiButton variant="ghost" size="sm" aria-label="Удалить" @click="removeNote(note.id)">
+          <UiButton variant="ghost" icon aria-label="Удалить" @click="removeNote(note.id)">
             <UiIcon name="trash" />
           </UiButton>
         </template>

@@ -94,12 +94,12 @@
           </div>
         </div>
         <template #actions>
-          <UiButton variant="ghost" size="sm" aria-label="Изменить" @click="openEdit(character.id)">
+          <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(character.id)">
             <UiIcon name="edit" />
           </UiButton>
           <UiButton
             variant="ghost"
-            size="sm"
+            icon
             aria-label="Удалить"
             @click="removeCharacter(character.id)"
           >
@@ -143,11 +143,11 @@
                 </button>
                 <button
                   type="button"
-                  class="text-error/60 transition hover:text-error"
+                  class="flex size-11 items-center justify-center text-error/60 transition hover:text-error"
                   aria-label="Удалить лейбл"
                   @click="removeLabel(label.id)"
                 >
-                  <UiIcon name="close" :size="14" />
+                  <UiIcon name="close" :size="16" />
                 </button>
               </div>
             </div>
