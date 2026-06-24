@@ -111,8 +111,12 @@
         </div>
       </header>
 
-      <main class="mx-auto w-full max-w-5xl grow px-4 py-8">
-        <RouterView />
+      <main class="mx-auto w-full max-w-5xl grow overflow-x-clip px-4 py-8">
+        <RouterView v-slot="{ Component }">
+          <Transition name="page" mode="out-in">
+            <component :is="Component" />
+          </Transition>
+        </RouterView>
       </main>
 
       <footer class="border-t border-base-300 px-4 py-6 text-center text-sm opacity-70">
@@ -177,5 +181,34 @@ function closeMenu() {
 .menu a.router-link-exact-active {
   color: var(--color-primary);
   font-weight: 600;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active {
+    transition: none;
+  }
+
+  .page-enter-from,
+  .page-leave-to {
+    transform: none;
+  }
 }
 </style>
