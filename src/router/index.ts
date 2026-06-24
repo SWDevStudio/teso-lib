@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import type { IconName } from '@/components/ui/icons'
 import HomePage from '@/pages/HomePage.vue'
+import { sections } from '@/assets/data/navigation'
 
 export interface NavLink {
   name: string
@@ -8,15 +9,11 @@ export interface NavLink {
   icon: IconName
 }
 
-export const navLinks: NavLink[] = [
-  { name: 'creation', label: 'Сотворение мира', icon: 'creation' },
-  { name: 'pantheon', label: 'Пантеон', icon: 'pantheon' },
-  { name: 'characters', label: 'Персонажи', icon: 'characters' },
-  { name: 'notes', label: 'Заметки', icon: 'notes' },
-  { name: 'quentas', label: 'Квенты', icon: 'quenta' },
-  { name: 'houses', label: 'Рода и Дома', icon: 'houses' },
-  { name: 'guide', label: 'Путеводитель', icon: 'guide' },
-]
+export const navLinks: NavLink[] = sections.map((section) => ({
+  name: section.name,
+  label: section.label,
+  icon: section.icon,
+}))
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,41 +21,11 @@ const routes: RouteRecordRaw[] = [
     name: 'home',
     component: HomePage,
   },
-  {
-    path: '/creation',
-    name: 'creation',
-    component: () => import('@/pages/WorldCreationPage.vue'),
-  },
-  {
-    path: '/pantheon',
-    name: 'pantheon',
-    component: () => import('@/pages/PantheonPage.vue'),
-  },
-  {
-    path: '/houses',
-    name: 'houses',
-    component: () => import('@/pages/HousesPage.vue'),
-  },
-  {
-    path: '/guide',
-    name: 'guide',
-    component: () => import('@/pages/TamrielGuidePage.vue'),
-  },
-  {
-    path: '/characters',
-    name: 'characters',
-    component: () => import('@/pages/CharactersPage.vue'),
-  },
-  {
-    path: '/notes',
-    name: 'notes',
-    component: () => import('@/pages/NotesPage.vue'),
-  },
-  {
-    path: '/quentas',
-    name: 'quentas',
-    component: () => import('@/pages/QuentasPage.vue'),
-  },
+  ...sections.map((section) => ({
+    path: section.path,
+    name: section.name,
+    component: section.component,
+  })),
 ]
 
 const router = createRouter({
