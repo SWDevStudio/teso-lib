@@ -2,6 +2,8 @@
   <div class="drawer min-h-screen">
     <input id="nav-drawer" v-model="drawerOpen" type="checkbox" class="drawer-toggle" />
 
+    <UiConfirm />
+
     <div class="drawer-content flex min-h-screen flex-col bg-base-200 text-base-content">
       <header
         class="navbar sticky top-0 z-30 border-b-2 border-primary/30 bg-base-100/95 px-4 shadow-sm backdrop-blur"
@@ -158,6 +160,7 @@ import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { navLinks } from '@/router'
 import UiIcon from '@/components/ui/UiIcon.vue'
+import UiConfirm from '@/components/UiConfirm.vue'
 
 const drawerOpen = ref(false)
 

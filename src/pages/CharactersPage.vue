@@ -113,6 +113,7 @@ import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { useClipboard } from '@vueuse/core'
+import { useConfirm } from '@/composables/useConfirm'
 import { useCharactersStore } from '@/stores/characters'
 import { useLabelsStore } from '@/stores/labels'
 import type { Character, CharacterInput } from '@/db'
@@ -233,8 +234,15 @@ const onSubmit = handleSubmit(async (values) => {
   closeModal()
 })
 
+const { confirm } = useConfirm()
+
 async function removeCharacter(id: number) {
-  if (!window.confirm('Удалить этого персонажа? Действие необратимо.')) return
+  const ok = await confirm({
+    message: 'Удалить этого персонажа? Действие необратимо.',
+    confirmText: 'Удалить',
+    danger: true,
+  })
+  if (!ok) return
   await charactersStore.remove(id)
 }
 

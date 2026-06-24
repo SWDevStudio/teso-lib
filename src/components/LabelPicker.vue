@@ -38,6 +38,7 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useLabelsStore } from '@/stores/labels'
+import { useConfirm } from '@/composables/useConfirm'
 import type { BadgeColor } from '@/components/ui/types'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiCheckbox from '@/components/ui/UiCheckbox.vue'
@@ -54,6 +55,7 @@ const emit = defineEmits<{
 
 const labelsStore = useLabelsStore()
 const { labels } = storeToRefs(labelsStore)
+const { confirm } = useConfirm()
 
 const newLabelName = ref('')
 
@@ -77,7 +79,12 @@ async function create() {
 }
 
 async function remove(id: number) {
-  if (!window.confirm('Удалить этот лейбл? Он исчезнет у всех персонажей и заметок.')) return
+  const ok = await confirm({
+    message: 'Удалить этот лейбл? Он исчезнет у всех персонажей и заметок.',
+    confirmText: 'Удалить',
+    danger: true,
+  })
+  if (!ok) return
   await labelsStore.remove(id)
   emit(
     'update:modelValue',

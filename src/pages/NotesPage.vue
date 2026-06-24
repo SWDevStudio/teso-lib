@@ -83,6 +83,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
+import { useConfirm } from '@/composables/useConfirm'
 import { useNotesStore } from '@/stores/notes'
 import { useLabelsStore } from '@/stores/labels'
 import type { Note, NoteInput } from '@/db'
@@ -167,8 +168,15 @@ function closeModal() {
   resetForm({ values: { title: '', body: '' } })
 }
 
-function removeNote(id: number) {
-  if (!window.confirm('Удалить эту заметку? Действие необратимо.')) return
+const { confirm } = useConfirm()
+
+async function removeNote(id: number) {
+  const ok = await confirm({
+    message: 'Удалить эту заметку? Действие необратимо.',
+    confirmText: 'Удалить',
+    danger: true,
+  })
+  if (!ok) return
   store.remove(id)
 }
 
