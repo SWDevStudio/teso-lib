@@ -14,6 +14,8 @@ export const navLinks: NavLink[] = [
   { name: 'characters', label: 'Персонажи', icon: 'characters' },
   { name: 'notes', label: 'Заметки', icon: 'notes' },
   { name: 'quentas', label: 'Квенты', icon: 'quenta' },
+  { name: 'houses', label: 'Рода и Дома', icon: 'houses' },
+  { name: 'guide', label: 'Путеводитель', icon: 'guide' },
 ]
 
 const routes: RouteRecordRaw[] = [
@@ -31,6 +33,16 @@ const routes: RouteRecordRaw[] = [
     path: '/pantheon',
     name: 'pantheon',
     component: () => import('@/pages/PantheonPage.vue'),
+  },
+  {
+    path: '/houses',
+    name: 'houses',
+    component: () => import('@/pages/HousesPage.vue'),
+  },
+  {
+    path: '/guide',
+    name: 'guide',
+    component: () => import('@/pages/TamrielGuidePage.vue'),
   },
   {
     path: '/characters',
