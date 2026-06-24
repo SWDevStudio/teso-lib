@@ -12,6 +12,11 @@ const html = computed(() => marked.parse(props.source ?? '', { async: false }) a
 </script>
 
 <style scoped>
+.ui-markdown {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
 .ui-markdown :deep(h2) {
   font-size: 1.25rem;
   font-weight: 600;

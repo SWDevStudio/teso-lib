@@ -69,7 +69,7 @@
                 />
                 <div class="min-w-0">
                   <h2 class="text-xl font-semibold">{{ deity.altmerName }}</h2>
-                  <p class="text-sm opacity-70">{{ deity.domain }}</p>
+                  <p class="text-base opacity-80">{{ deity.domain }}</p>
                 </div>
               </div>
               <UiBadge :color="deity.revered ? 'success' : 'error'" size="sm">
@@ -77,13 +77,13 @@
               </UiBadge>
             </div>
 
-            <p class="line-clamp-2 text-sm opacity-80">{{ deity.shortDesc }}</p>
+            <p class="line-clamp-2 opacity-90">{{ deity.shortDesc }}</p>
 
             <div v-if="deity.otherNames.length" class="flex flex-wrap gap-1.5">
               <span
                 v-for="other in deity.otherNames"
                 :key="other.race"
-                class="max-w-full rounded-md border border-base-300 bg-base-200 px-2 py-1 text-xs leading-snug"
+                class="max-w-full rounded-md border border-base-300 bg-base-200 px-2 py-1 text-sm leading-snug"
               >
                 {{ other.race }} — {{ other.name }}
               </span>
@@ -99,7 +99,7 @@
           <UiBadge :color="selected.revered ? 'success' : 'error'">
             {{ selected.revered ? 'Почитаем' : 'Отвергнут' }}
           </UiBadge>
-          <span class="text-sm opacity-70">{{ selected.domain }}</span>
+          <span class="text-base opacity-80">{{ selected.domain }}</span>
         </div>
 
         <p class="italic opacity-80">{{ selected.oneLine }}</p>
@@ -108,7 +108,7 @@
           <h4 class="text-sm font-semibold uppercase tracking-wide opacity-70">
             Имена у других народов
           </h4>
-          <ul class="space-y-1 text-sm">
+          <ul class="space-y-1">
             <li
               v-for="other in selected.otherNames"
               :key="other.race"

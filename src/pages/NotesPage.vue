@@ -30,7 +30,7 @@
       <UiCard v-for="note in notes" :key="note.id">
         <h3 v-if="note.title" class="text-xl font-semibold">{{ note.title }}</h3>
         <p class="whitespace-pre-wrap leading-relaxed">{{ note.body }}</p>
-        <p class="mt-2 text-xs opacity-70">{{ formatDate(note.updated_at) }}</p>
+        <p class="mt-2 text-sm opacity-70">{{ formatDate(note.updated_at) }}</p>
         <template #actions>
           <UiButton
             variant="ghost"

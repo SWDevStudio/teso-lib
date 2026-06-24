@@ -16,7 +16,7 @@
             <UiIcon :name="card.icon" :size="40" class="shrink-0 text-primary" />
             <div class="min-w-0 grow">
               <h3 class="card-title">{{ card.title }}</h3>
-              <p class="text-sm opacity-70">{{ card.description }}</p>
+              <p class="text-base opacity-80">{{ card.description }}</p>
             </div>
           </div>
         </UiCard>
