@@ -130,22 +130,26 @@
         <UiField label="Лейблы">
           <div class="space-y-3">
             <div v-if="labels.length" class="flex flex-wrap gap-2">
-              <button
-                v-for="label in labels"
-                :key="label.id"
-                type="button"
-                class="cursor-pointer"
-                @click="toggleSelectedLabel(label.id)"
-              >
-                <UiBadge
-                  :color="label.color as BadgeColor"
-                  :outline="!selectedLabelIds.includes(label.id)"
-                  :class="selectedLabelIds.includes(label.id) ? '' : 'opacity-60'"
+              <div v-for="label in labels" :key="label.id" class="inline-flex items-center gap-1">
+                <button type="button" class="cursor-pointer" @click="toggleSelectedLabel(label.id)">
+                  <UiBadge
+                    :color="label.color as BadgeColor"
+                    :outline="!selectedLabelIds.includes(label.id)"
+                    :class="selectedLabelIds.includes(label.id) ? '' : 'opacity-60'"
+                  >
+                    <UiIcon v-if="selectedLabelIds.includes(label.id)" name="check" :size="14" />
+                    {{ label.name }}
+                  </UiBadge>
+                </button>
+                <button
+                  type="button"
+                  class="text-error/60 transition hover:text-error"
+                  aria-label="Удалить лейбл"
+                  @click="removeLabel(label.id)"
                 >
-                  <UiIcon v-if="selectedLabelIds.includes(label.id)" name="check" :size="14" />
-                  {{ label.name }}
-                </UiBadge>
-              </button>
+                  <UiIcon name="close" :size="14" />
+                </button>
+              </div>
             </div>
 
             <div class="flex flex-wrap items-end gap-2">
@@ -259,6 +263,14 @@ async function createLabel() {
   const id = await labelsStore.add(trimmed, DEFAULT_LABEL_COLOR)
   if (id > 0 && !selectedLabelIds.value.includes(id)) selectedLabelIds.value.push(id)
   newLabelName.value = ''
+}
+
+async function removeLabel(id: number) {
+  if (!window.confirm('Удалить этот лейбл? Он исчезнет у всех персонажей.')) return
+  await labelsStore.remove(id)
+  selectedLabelIds.value = selectedLabelIds.value.filter((labelId) => labelId !== id)
+  activeFilter.value = activeFilter.value.filter((labelId) => labelId !== id)
+  await charactersStore.load()
 }
 
 function closeModal() {
