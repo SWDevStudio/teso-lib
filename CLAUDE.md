@@ -38,6 +38,23 @@ Vue 3 + Vite + Capacitor (Android). UI — Tailwind CSS v4 + daisyUI. Состо
 - `src/router/` — маршруты
 - `src/assets/` — стили и статика
 
+## Мобильная разработка — тач-таргеты
+
+Приложение рассчитано на телефон. Все интерактивные элементы (кнопки, иконки-кнопки, чекбоксы, чипы, ссылки) должны быть удобны для пальца:
+
+- **Минимальная зона нажатия — 44–48px.** Apple HIG: ≥ 44×44 pt; Material Design 3 (Android): ≥ 48×48 dp; WCAG 2.2 (минимум, AA): ≥ 24×24 px. Ориентир — 44–48px.
+- Иконка может быть визуально маленькой (16–24px), но **область нажатия** добивается размером/отступами до 44–48px. Для icon-кнопок используй `<UiButton icon>` — он даёт квадрат ≥44px.
+- Между соседними тач-целями — отступ не меньше 8px.
+- Деструктивные действия (удаление) — с подтверждением или возможностью отмены.
+
+Источники:
+
+- [Apple HIG — Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
+- [Apple HIG — Buttons](https://developer.apple.com/design/human-interface-guidelines/buttons)
+- [Material Design 3 — Accessibility](https://m3.material.io/foundations/designing/structure)
+- [Android Developers — Make apps more accessible](https://developer.android.com/guide/topics/ui/accessibility/apps)
+- [WCAG 2.2 — Target Size (Minimum) 2.5.8](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
+
 ## Правила коммитов
 
 Сообщение коммита начинается с тега слоя в квадратных скобках, затем — краткое описание на русском:
