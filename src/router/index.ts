@@ -1,17 +1,19 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import type { IconName } from '@/components/ui/icons'
 import HomePage from '@/pages/HomePage.vue'
 
 export interface NavLink {
   name: string
   label: string
+  icon: IconName
 }
 
 export const navLinks: NavLink[] = [
-  { name: 'creation', label: 'Сотворение мира' },
-  { name: 'pantheon', label: 'Пантеон' },
-  { name: 'characters', label: 'Персонажи' },
-  { name: 'notes', label: 'Заметки' },
-  { name: 'quentas', label: 'Квенты' },
+  { name: 'creation', label: 'Сотворение мира', icon: 'creation' },
+  { name: 'pantheon', label: 'Пантеон', icon: 'pantheon' },
+  { name: 'characters', label: 'Персонажи', icon: 'characters' },
+  { name: 'notes', label: 'Заметки', icon: 'notes' },
+  { name: 'quentas', label: 'Квенты', icon: 'quenta' },
 ]
 
 const routes: RouteRecordRaw[] = [
