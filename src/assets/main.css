@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+
+/* daisyUI v5 — register only the two custom Elder Scrolls themes.
+   `parchment` is the default (light reading page); `elderscrolls` is the
+   dark tome look, available via the theme switcher. */
+@plugin 'daisyui' {
+  themes:
+    parchment --default,
+    elderscrolls;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Theme: elderscrolls  —  "Ancient Tome"
+   Dark, weathered leather bound in gilded gold, imperial crimson and the
+   verdigris of old bronze. Inspired by the Skyrim journal / menu UI.
+   ────────────────────────────────────────────────────────────────────────── */
+@plugin 'daisyui/theme' {
+  name: 'elderscrolls';
+  color-scheme: dark;
+
+  /* surfaces — aged dark leather, lightest → darkest */
+  --color-base-100: oklch(23% 0.014 70);
+  --color-base-200: oklch(19% 0.013 68);
+  --color-base-300: oklch(15% 0.012 66);
+  --color-base-content: oklch(88% 0.035 84); /* parchment ink */
+
+  /* primary — gilded Septim gold */
+  --color-primary: oklch(76% 0.12 82);
+  --color-primary-content: oklch(21% 0.03 70);
+
+  /* secondary — imperial crimson */
+  --color-secondary: oklch(48% 0.12 30);
+  --color-secondary-content: oklch(93% 0.025 85);
+
+  /* accent — verdigris of weathered bronze */
+  --color-accent: oklch(60% 0.075 178);
+  --color-accent-content: oklch(16% 0.02 178);
+
+  /* neutral — dark tanned leather */
+  --color-neutral: oklch(28% 0.018 64);
+  --color-neutral-content: oklch(87% 0.035 84);
+
+  /* state colors — steel, moss, torchlight, blood */
+  --color-info: oklch(65% 0.08 232);
+  --color-info-content: oklch(15% 0.02 232);
+  --color-success: oklch(62% 0.1 150);
+  --color-success-content: oklch(14% 0.02 150);
+  --color-warning: oklch(78% 0.13 72);
+  --color-warning-content: oklch(20% 0.03 72);
+  --color-error: oklch(54% 0.17 27);
+  --color-error-content: oklch(95% 0.02 80);
+
+  /* geometry — sharp, carved-stone edges */
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.375rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+
+  /* effects — engraved depth + subtle aged grain */
+  --depth: 1;
+  --noise: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Theme: parchment  —  "Aged Page"
+   Light sepia parchment with sepia ink, bronzed gold and crimson rubrics.
+   The reading surface of the codex.
+   ────────────────────────────────────────────────────────────────────────── */
+@plugin 'daisyui/theme' {
+  name: 'parchment';
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: oklch(92% 0.025 85);
+  --color-base-200: oklch(88% 0.03 83);
+  --color-base-300: oklch(83% 0.035 80);
+  --color-base-content: oklch(29% 0.04 58); /* sepia ink */
+
+  --color-primary: oklch(56% 0.11 70);
+  --color-primary-content: oklch(96% 0.02 85);
+
+  --color-secondary: oklch(45% 0.13 30);
+  --color-secondary-content: oklch(96% 0.02 85);
+
+  --color-accent: oklch(50% 0.07 178);
+  --color-accent-content: oklch(96% 0.02 178);
+
+  --color-neutral: oklch(32% 0.03 58);
+  --color-neutral-content: oklch(92% 0.025 85);
+
+  --color-info: oklch(52% 0.08 232);
+  --color-info-content: oklch(96% 0.02 232);
+  --color-success: oklch(52% 0.1 150);
+  --color-success-content: oklch(96% 0.02 150);
+  --color-warning: oklch(66% 0.13 70);
+  --color-warning-content: oklch(20% 0.03 70);
+  --color-error: oklch(50% 0.17 27);
+  --color-error-content: oklch(96% 0.02 80);
+
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.375rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Base layer — a tome should read like a book: serif body, display headings.
+   System serif stack keeps it offline-friendly (Capacitor). For a fully
+   authentic look, drop a "Cinzel" / "EB Garamond" font in and extend below.
+   ────────────────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --font-serif:
+      'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, 'Times New Roman',
+      serif;
+  }
+
+  html,
+  body {
+    min-height: 100vh;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    background-color: var(--color-base-100);
+    color: var(--color-base-content);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    letter-spacing: 0.01em;
+  }
+}
