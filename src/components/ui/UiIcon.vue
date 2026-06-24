@@ -19,9 +19,9 @@ const props = withDefaults(
     size?: number | string
     label?: string
   }>(),
-  // По умолчанию иконка размером со строку текста (1em). Передайте `size`,
+  // По умолчанию иконка чуть крупнее строки текста (1.25em). Передайте `size`,
   // чтобы задать фиксированный размер, либо управляйте через CSS-классы (w-*, text-*).
-  { size: '1em' },
+  { size: '1.25em' },
 )
 
 const component = computed(() => icons[props.name])

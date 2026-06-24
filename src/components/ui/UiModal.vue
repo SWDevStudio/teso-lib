@@ -11,7 +11,7 @@
         <header v-if="title || slots.header" class="mb-4 flex items-start justify-between gap-4">
           <h3 class="text-lg font-semibold">{{ title }}</h3>
           <UiButton variant="ghost" size="sm" aria-label="Закрыть" @click="close">
-            <UiIcon name="close" />
+            <UiIcon name="close" :size="22" />
           </UiButton>
         </header>
         <slot />
