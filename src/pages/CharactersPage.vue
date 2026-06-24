@@ -48,15 +48,25 @@
     <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <UiCard v-for="character in filteredCharacters" :key="character.id">
         <div class="space-y-2">
-          <h3 class="text-xl font-semibold">{{ character.name }}</h3>
-          <p v-if="character.real_name" class="text-sm opacity-70">
+          <h3 class="text-xl font-semibold">
+            <span v-if="character.title" class="font-normal opacity-80">{{ character.title }} </span>
+            {{ character.name }}
+          </h3>
+          <p v-if="character.note" class="whitespace-pre-wrap opacity-90">{{ character.note }}</p>
+          <p v-if="character.real_name" class="text-sm opacity-60">
             Истинное имя: {{ character.real_name }}
           </p>
-          <p v-if="character.title" class="text-sm italic opacity-70">{{ character.title }}</p>
-          <p v-if="character.note" class="whitespace-pre-wrap opacity-90">{{ character.note }}</p>
           <LabelTags :ids="character.labelIds" class="pt-1" />
         </div>
         <template #actions>
+          <UiButton
+            variant="ghost"
+            icon
+            :aria-label="copiedId === character.id ? 'Имя скопировано' : 'Копировать имя'"
+            @click="copyName(character)"
+          >
+            <UiIcon :name="copiedId === character.id ? 'check' : 'copy'" />
+          </UiButton>
           <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(character.id)">
             <UiIcon name="edit" />
           </UiButton>
@@ -102,9 +112,10 @@
 import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
+import { useClipboard } from '@vueuse/core'
 import { useCharactersStore } from '@/stores/characters'
 import { useLabelsStore } from '@/stores/labels'
-import type { CharacterInput } from '@/db'
+import type { Character, CharacterInput } from '@/db'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
@@ -127,6 +138,21 @@ interface CharacterForm {
 const charactersStore = useCharactersStore()
 const labelsStore = useLabelsStore()
 const { characters, loading } = storeToRefs(charactersStore)
+
+const { copy } = useClipboard()
+const copiedId = ref<number | null>(null)
+
+function displayName(character: Character) {
+  return character.title ? `${character.title} ${character.name}` : character.name
+}
+
+function copyName(character: Character) {
+  copy(displayName(character))
+  copiedId.value = character.id
+  window.setTimeout(() => {
+    if (copiedId.value === character.id) copiedId.value = null
+  }, 1500)
+}
 
 const activeFilter = ref<number[]>([])
 

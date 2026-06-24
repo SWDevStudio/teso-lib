@@ -2,6 +2,8 @@ import type { Component } from 'vue'
 
 import IconCreation from '~icons/game-icons/cosmic-egg'
 import IconPantheon from '~icons/game-icons/greek-temple'
+import IconHouses from '~icons/game-icons/family-tree'
+import IconGuide from '~icons/game-icons/compass'
 import IconCharacters from '~icons/game-icons/elf-helmet'
 import IconNotes from '~icons/game-icons/scroll-quill'
 import IconCodex from '~icons/game-icons/open-book'
@@ -27,10 +29,13 @@ import IconSun from '~icons/lucide/sun'
 import IconMoon from '~icons/lucide/moon'
 import IconUser from '~icons/lucide/user'
 import IconUsers from '~icons/lucide/users'
+import IconCopy from '~icons/lucide/copy'
 
 export const icons = {
   creation: IconCreation,
   pantheon: IconPantheon,
+  houses: IconHouses,
+  guide: IconGuide,
   characters: IconCharacters,
   notes: IconNotes,
   codex: IconCodex,
@@ -55,6 +60,7 @@ export const icons = {
   moon: IconMoon,
   user: IconUser,
   users: IconUsers,
+  copy: IconCopy,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons
