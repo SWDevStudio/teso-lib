@@ -18,7 +18,6 @@
               <h3 class="card-title">{{ card.title }}</h3>
               <p class="text-sm opacity-70">{{ card.description }}</p>
             </div>
-            <UiIcon name="chevron-right" class="shrink-0 opacity-50" />
           </div>
         </UiCard>
       </RouterLink>
