@@ -59,34 +59,34 @@
         @click="open(deity)"
       >
         <UiCard clickable>
-          <div class="flex items-start gap-4">
-            <UiIcon
-              :name="deity.category === 'good' ? 'good' : 'bad'"
-              :size="32"
-              class="shrink-0 text-primary"
-            />
-            <div class="min-w-0 flex-1 space-y-2">
-              <div class="flex flex-wrap items-start justify-between gap-2">
+          <div class="space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex min-w-0 items-center gap-3">
+                <UiIcon
+                  :name="deity.category === 'good' ? 'good' : 'bad'"
+                  :size="28"
+                  class="shrink-0 text-primary"
+                />
                 <div class="min-w-0">
                   <h2 class="text-xl font-semibold">{{ deity.altmerName }}</h2>
                   <p class="text-sm opacity-70">{{ deity.domain }}</p>
                 </div>
-                <UiBadge :color="deity.revered ? 'success' : 'error'" size="sm">
-                  {{ deity.revered ? 'Почитаем' : 'Отвергнут' }}
-                </UiBadge>
               </div>
+              <UiBadge :color="deity.revered ? 'success' : 'error'" size="sm">
+                {{ deity.revered ? 'Почитаем' : 'Отвергнут' }}
+              </UiBadge>
+            </div>
 
-              <p class="line-clamp-2 text-sm opacity-80">{{ deity.shortDesc }}</p>
+            <p class="line-clamp-2 text-sm opacity-80">{{ deity.shortDesc }}</p>
 
-              <div v-if="deity.otherNames.length" class="flex flex-wrap gap-1.5">
-                <span
-                  v-for="other in deity.otherNames"
-                  :key="other.race"
-                  class="max-w-full rounded border border-base-300 px-2 py-0.5 text-xs leading-snug opacity-70"
-                >
-                  {{ other.race }} — {{ other.name }}
-                </span>
-              </div>
+            <div v-if="deity.otherNames.length" class="flex flex-wrap gap-1.5">
+              <span
+                v-for="other in deity.otherNames"
+                :key="other.race"
+                class="max-w-full rounded-md border border-base-300 bg-base-200 px-2 py-1 text-xs leading-snug"
+              >
+                {{ other.race }} — {{ other.name }}
+              </span>
             </div>
           </div>
         </UiCard>
