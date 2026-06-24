@@ -30,6 +30,7 @@ import IconMoon from '~icons/lucide/moon'
 import IconUser from '~icons/lucide/user'
 import IconUsers from '~icons/lucide/users'
 import IconCopy from '~icons/lucide/copy'
+import IconRules from '~icons/game-icons/rule-book'
 
 export const icons = {
   creation: IconCreation,
@@ -61,6 +62,7 @@ export const icons = {
   user: IconUser,
   users: IconUsers,
   copy: IconCopy,
+  rules: IconRules,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons

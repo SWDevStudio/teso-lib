@@ -77,6 +77,15 @@ export const sections: Section[] = [
     icon: 'guide',
     component: () => import('@/pages/TamrielGuidePage.vue'),
   },
+  {
+    name: 'rules',
+    path: '/rules',
+    label: 'Правила',
+    title: 'Правила',
+    description: 'Свод правил — на случай, если ты вдруг решишься их открыть',
+    icon: 'rules',
+    component: () => import('@/pages/RulesPage.vue'),
+  },
 ]
 
 export interface NavCard {
