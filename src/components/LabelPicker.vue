@@ -1,27 +1,26 @@
 <template>
   <div class="space-y-3">
-    <div v-if="labels.length" class="flex flex-wrap gap-2">
-      <div v-for="label in labels" :key="label.id" class="inline-flex items-center gap-1">
-        <button type="button" class="cursor-pointer" @click="toggle(label.id)">
-          <UiBadge
-            :color="label.color as BadgeColor"
-            :outline="!modelValue.includes(label.id)"
-            :class="modelValue.includes(label.id) ? '' : 'opacity-60'"
-          >
-            <UiIcon v-if="modelValue.includes(label.id)" name="check" :size="14" />
-            {{ label.name }}
-          </UiBadge>
-        </button>
+    <ul
+      v-if="labels.length"
+      class="divide-y divide-base-200 overflow-hidden rounded-box border border-base-300"
+    >
+      <li v-for="label in labels" :key="label.id" class="flex items-center gap-2 pr-1">
+        <UiCheckbox
+          :model-value="modelValue.includes(label.id)"
+          :label="label.name"
+          class="grow px-3 py-2"
+          @update:model-value="() => toggle(label.id)"
+        />
         <button
           type="button"
-          class="flex size-11 items-center justify-center text-error/60 transition hover:text-error"
+          class="flex size-11 shrink-0 items-center justify-center text-error/60 transition hover:text-error"
           aria-label="Удалить лейбл"
           @click="remove(label.id)"
         >
-          <UiIcon name="close" :size="16" />
+          <UiIcon name="trash" :size="16" />
         </button>
-      </div>
-    </div>
+      </li>
+    </ul>
 
     <div class="flex flex-wrap items-end gap-2">
       <div class="grow basis-40">
@@ -40,8 +39,8 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useLabelsStore } from '@/stores/labels'
 import type { BadgeColor } from '@/components/ui/types'
-import UiBadge from '@/components/ui/UiBadge.vue'
 import UiButton from '@/components/ui/UiButton.vue'
+import UiCheckbox from '@/components/ui/UiCheckbox.vue'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiInput from '@/components/ui/UiInput.vue'
 
