@@ -32,4 +32,10 @@ export const navCards: NavCard[] = [
     icon: 'notes',
     routeName: 'notes',
   },
+  {
+    title: 'Квенты',
+    description: 'Жизнеописания героев Тамриэля',
+    icon: 'quenta',
+    routeName: 'quentas',
+  },
 ]
