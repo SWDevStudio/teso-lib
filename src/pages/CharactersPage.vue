@@ -17,7 +17,14 @@
 
     <div v-if="labels.length" class="flex flex-wrap items-center gap-2">
       <button type="button" class="cursor-pointer" @click="clearFilter">
-        <UiBadge color="neutral" :outline="activeFilter.length !== 0">Все</UiBadge>
+        <UiBadge
+          color="neutral"
+          :outline="activeFilter.length !== 0"
+          :class="activeFilter.length === 0 ? '' : 'opacity-60'"
+        >
+          <UiIcon v-if="activeFilter.length === 0" name="check" :size="14" />
+          Все
+        </UiBadge>
       </button>
       <button
         v-for="label in labels"
@@ -26,7 +33,12 @@
         class="cursor-pointer"
         @click="toggleFilter(label.id)"
       >
-        <UiBadge :color="label.color as BadgeColor" :outline="!activeFilter.includes(label.id)">
+        <UiBadge
+          :color="label.color as BadgeColor"
+          :outline="!activeFilter.includes(label.id)"
+          :class="activeFilter.includes(label.id) ? '' : 'opacity-60'"
+        >
+          <UiIcon v-if="activeFilter.includes(label.id)" name="check" :size="14" />
           {{ label.name }}
         </UiBadge>
       </button>
@@ -128,7 +140,9 @@
                 <UiBadge
                   :color="label.color as BadgeColor"
                   :outline="!selectedLabelIds.includes(label.id)"
+                  :class="selectedLabelIds.includes(label.id) ? '' : 'opacity-60'"
                 >
+                  <UiIcon v-if="selectedLabelIds.includes(label.id)" name="check" :size="14" />
                   {{ label.name }}
                 </UiBadge>
               </button>
