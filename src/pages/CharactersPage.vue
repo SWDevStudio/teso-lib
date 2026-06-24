@@ -152,9 +152,6 @@
               <div class="grow basis-40">
                 <UiInput v-model="newLabelName" placeholder="Новый лейбл" />
               </div>
-              <div class="basis-36">
-                <UiSelect v-model="newLabelColor" :options="labelColorOptions" />
-              </div>
               <UiButton
                 variant="secondary"
                 outline
@@ -191,11 +188,12 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiField from '@/components/ui/UiField.vue'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiTextarea from '@/components/ui/UiTextarea.vue'
-import UiSelect from '@/components/ui/UiSelect.vue'
 import UiBadge from '@/components/ui/UiBadge.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 
 type BadgeColor = 'primary' | 'secondary' | 'accent' | 'info' | 'success' | 'warning' | 'error'
+
+const DEFAULT_LABEL_COLOR: BadgeColor = 'primary'
 
 interface CharacterForm {
   name: string
@@ -210,16 +208,6 @@ const { characters, loading } = storeToRefs(charactersStore)
 const { labels } = storeToRefs(labelsStore)
 
 const labelById = computed(() => new Map(labels.value.map((label) => [label.id, label])))
-
-const labelColorOptions: { label: string; value: BadgeColor }[] = [
-  { label: 'Лазурь', value: 'primary' },
-  { label: 'Сапфир', value: 'secondary' },
-  { label: 'Аметист', value: 'accent' },
-  { label: 'Иней', value: 'info' },
-  { label: 'Изумруд', value: 'success' },
-  { label: 'Янтарь', value: 'warning' },
-  { label: 'Багрянец', value: 'error' },
-]
 
 const activeFilter = ref<number[]>([])
 
@@ -244,7 +232,6 @@ const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const selectedLabelIds = ref<number[]>([])
 const newLabelName = ref('')
-const newLabelColor = ref<BadgeColor>('primary')
 
 const { handleSubmit, errors, defineField, resetForm } = useForm<CharacterForm>({
   initialValues: { name: '', realName: '', title: '', note: '' },
@@ -258,9 +245,7 @@ const [realName] = defineField('realName')
 const [title] = defineField('title')
 const [note] = defineField('note')
 
-const modalTitle = computed(() =>
-  editingId.value === null ? 'Внести персонажа' : 'Изменить запись',
-)
+const modalTitle = computed(() => (editingId.value === null ? 'Внести персонажа' : 'Изменить запись'))
 
 function toggleSelectedLabel(labelId: number) {
   const index = selectedLabelIds.value.indexOf(labelId)
@@ -271,7 +256,7 @@ function toggleSelectedLabel(labelId: number) {
 async function createLabel() {
   const trimmed = newLabelName.value.trim()
   if (!trimmed) return
-  const id = await labelsStore.add(trimmed, newLabelColor.value)
+  const id = await labelsStore.add(trimmed, DEFAULT_LABEL_COLOR)
   if (id > 0 && !selectedLabelIds.value.includes(id)) selectedLabelIds.value.push(id)
   newLabelName.value = ''
 }
@@ -281,7 +266,6 @@ function closeModal() {
   editingId.value = null
   selectedLabelIds.value = []
   newLabelName.value = ''
-  newLabelColor.value = 'primary'
   resetForm()
 }
 
@@ -290,7 +274,6 @@ function openCreate() {
   editingId.value = null
   selectedLabelIds.value = []
   newLabelName.value = ''
-  newLabelColor.value = 'primary'
   modalOpen.value = true
 }
 
@@ -308,7 +291,6 @@ function openEdit(id: number) {
   })
   selectedLabelIds.value = [...character.labelIds]
   newLabelName.value = ''
-  newLabelColor.value = 'primary'
   modalOpen.value = true
 }
 
