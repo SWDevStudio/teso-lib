@@ -78,16 +78,14 @@
 
               <p class="line-clamp-2 text-sm opacity-80">{{ deity.shortDesc }}</p>
 
-              <div v-if="deity.otherNames.length" class="flex flex-wrap gap-1">
-                <UiBadge
+              <div v-if="deity.otherNames.length" class="flex flex-wrap gap-1.5">
+                <span
                   v-for="other in deity.otherNames"
                   :key="other.race"
-                  color="ghost"
-                  size="sm"
-                  outline
+                  class="max-w-full rounded border border-base-300 px-2 py-0.5 text-xs leading-snug opacity-70"
                 >
                   {{ other.race }} — {{ other.name }}
-                </UiBadge>
+                </span>
               </div>
             </div>
           </div>
