@@ -22,6 +22,7 @@ export async function addLabel(name: string, color: string): Promise<number> {
 
 export async function deleteLabel(id: number): Promise<void> {
   await getDb().run('DELETE FROM character_labels WHERE label_id = ?;', [id])
+  await getDb().run('DELETE FROM note_labels WHERE label_id = ?;', [id])
   await getDb().run('DELETE FROM labels WHERE id = ?;', [id])
   await persist()
 }

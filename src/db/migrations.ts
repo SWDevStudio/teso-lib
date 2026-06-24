@@ -4,7 +4,7 @@ export const DB_NAME = 'teso'
 
 // Текущая версия схемы. Поднимайте на +1 и добавляйте новый объект в `upgrades`,
 // когда нужно изменить схему или долить данные у уже установленных приложений.
-export const DB_VERSION = 2
+export const DB_VERSION = 3
 
 // Версионные миграции. Каждый объект применяется один раз, когда БД доходит до его toVersion.
 // statements[] выполняются по порядку.
@@ -69,6 +69,17 @@ export const upgrades: capSQLiteVersionUpgrade[] = [
         character_id INTEGER NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
         label_id     INTEGER NOT NULL REFERENCES labels(id) ON DELETE CASCADE,
         PRIMARY KEY (character_id, label_id)
+      );`,
+    ],
+  },
+  {
+    toVersion: 3,
+    statements: [
+      // Связь «заметка ↔ лейбл» (фильтр заметок по лейблам).
+      `CREATE TABLE IF NOT EXISTS note_labels (
+        note_id  INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
+        label_id INTEGER NOT NULL REFERENCES labels(id) ON DELETE CASCADE,
+        PRIMARY KEY (note_id, label_id)
       );`,
     ],
   },
