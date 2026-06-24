@@ -12,6 +12,8 @@
       </UiButton>
     </header>
 
+    <LabelFilter v-model="activeFilter" />
+
     <UiEmptyState
       v-if="!loading && notes.length === 0"
       icon="notes"
@@ -26,18 +28,28 @@
       </template>
     </UiEmptyState>
 
+    <UiEmptyState
+      v-else-if="filteredNotes.length === 0"
+      icon="filter"
+      title="По выбранным лейблам ничего не найдено"
+      description="Заметки есть, но ни одна не подходит под все выбранные лейблы."
+    >
+      <template #actions>
+        <UiButton variant="ghost" @click="clearFilter">
+          <UiIcon name="filter" />
+          Сбросить фильтр
+        </UiButton>
+      </template>
+    </UiEmptyState>
+
     <div v-else class="grid gap-4 md:grid-cols-2">
-      <UiCard v-for="note in notes" :key="note.id">
+      <UiCard v-for="note in filteredNotes" :key="note.id">
         <h3 v-if="note.title" class="text-xl font-semibold">{{ note.title }}</h3>
         <p class="whitespace-pre-wrap leading-relaxed">{{ note.body }}</p>
+        <LabelTags :ids="note.labelIds" class="pt-1" />
         <p class="mt-2 text-sm opacity-70">{{ formatDate(note.updated_at) }}</p>
         <template #actions>
-          <UiButton
-            variant="ghost"
-            icon
-            aria-label="Изменить"
-            @click="openEdit(note.id, note.title, note.body)"
-          >
+          <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(note)">
             <UiIcon name="edit" />
           </UiButton>
           <UiButton variant="ghost" icon aria-label="Удалить" @click="removeNote(note.id)">
@@ -53,12 +65,10 @@
           <UiInput v-model="title" placeholder="Необязательно" :invalid="!!errors.title" />
         </UiField>
         <UiField label="Текст" :error="errors.body" required>
-          <UiTextarea
-            v-model="body"
-            :rows="6"
-            placeholder="Изложи свою мысль"
-            :invalid="!!errors.body"
-          />
+          <UiTextarea v-model="body" :rows="6" placeholder="Изложи свою мысль" :invalid="!!errors.body" />
+        </UiField>
+        <UiField label="Лейблы">
+          <LabelPicker v-model="selectedLabelIds" @deleted="onLabelDeleted" />
         </UiField>
       </form>
       <template #actions>
@@ -70,11 +80,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { useNotesStore } from '@/stores/notes'
-import type { NoteInput } from '@/db'
+import { useLabelsStore } from '@/stores/labels'
+import type { Note, NoteInput } from '@/db'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiModal from '@/components/ui/UiModal.vue'
@@ -83,12 +94,35 @@ import UiField from '@/components/ui/UiField.vue'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiTextarea from '@/components/ui/UiTextarea.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
+import LabelFilter from '@/components/LabelFilter.vue'
+import LabelPicker from '@/components/LabelPicker.vue'
+import LabelTags from '@/components/LabelTags.vue'
 
 const store = useNotesStore()
+const labelsStore = useLabelsStore()
 const { notes, loading } = storeToRefs(store)
+
+const activeFilter = ref<number[]>([])
+
+const filteredNotes = computed(() => {
+  if (activeFilter.value.length === 0) return notes.value
+  return notes.value.filter((note) =>
+    activeFilter.value.every((labelId) => note.labelIds.includes(labelId)),
+  )
+})
+
+function clearFilter() {
+  activeFilter.value = []
+}
+
+function onLabelDeleted(id: number) {
+  activeFilter.value = activeFilter.value.filter((labelId) => labelId !== id)
+  store.load()
+}
 
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
+const selectedLabelIds = ref<number[]>([])
 
 const { handleSubmit, errors, defineField, resetForm } = useForm<{ title: string; body: string }>({
   initialValues: { title: '', body: '' },
@@ -115,18 +149,21 @@ function formatDate(value: string) {
 function openCreate() {
   editingId.value = null
   resetForm({ values: { title: '', body: '' } })
+  selectedLabelIds.value = []
   modalOpen.value = true
 }
 
-function openEdit(id: number, noteTitle: string, noteBody: string) {
-  editingId.value = id
-  resetForm({ values: { title: noteTitle, body: noteBody } })
+function openEdit(note: Note) {
+  editingId.value = note.id
+  resetForm({ values: { title: note.title, body: note.body } })
+  selectedLabelIds.value = [...note.labelIds]
   modalOpen.value = true
 }
 
 function closeModal() {
   modalOpen.value = false
   editingId.value = null
+  selectedLabelIds.value = []
   resetForm({ values: { title: '', body: '' } })
 }
 
@@ -136,7 +173,11 @@ function removeNote(id: number) {
 }
 
 const onSubmit = handleSubmit(async (vals) => {
-  const input: NoteInput = { title: vals.title.trim(), body: vals.body.trim() }
+  const input: NoteInput = {
+    title: vals.title.trim(),
+    body: vals.body.trim(),
+    labelIds: [...selectedLabelIds.value],
+  }
   if (editingId.value !== null) {
     await store.update(editingId.value, input)
   } else {
@@ -147,5 +188,6 @@ const onSubmit = handleSubmit(async (vals) => {
 
 onMounted(() => {
   store.load()
+  labelsStore.load()
 })
 </script>

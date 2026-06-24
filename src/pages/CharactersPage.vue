@@ -15,34 +15,7 @@
       </UiButton>
     </header>
 
-    <div v-if="labels.length" class="flex flex-wrap items-center gap-2">
-      <button type="button" class="cursor-pointer" @click="clearFilter">
-        <UiBadge
-          color="neutral"
-          :outline="activeFilter.length !== 0"
-          :class="activeFilter.length === 0 ? '' : 'opacity-60'"
-        >
-          <UiIcon v-if="activeFilter.length === 0" name="check" :size="14" />
-          Все
-        </UiBadge>
-      </button>
-      <button
-        v-for="label in labels"
-        :key="label.id"
-        type="button"
-        class="cursor-pointer"
-        @click="toggleFilter(label.id)"
-      >
-        <UiBadge
-          :color="label.color as BadgeColor"
-          :outline="!activeFilter.includes(label.id)"
-          :class="activeFilter.includes(label.id) ? '' : 'opacity-60'"
-        >
-          <UiIcon v-if="activeFilter.includes(label.id)" name="check" :size="14" />
-          {{ label.name }}
-        </UiBadge>
-      </button>
-    </div>
+    <LabelFilter v-model="activeFilter" />
 
     <UiEmptyState
       v-if="!loading && characters.length === 0"
@@ -81,28 +54,13 @@
           </p>
           <p v-if="character.title" class="text-sm italic opacity-70">{{ character.title }}</p>
           <p v-if="character.note" class="whitespace-pre-wrap opacity-90">{{ character.note }}</p>
-          <div v-if="character.labelIds.length" class="flex flex-wrap gap-2 pt-1">
-            <template v-for="labelId in character.labelIds" :key="labelId">
-              <UiBadge
-                v-if="labelById.get(labelId)"
-                :color="labelById.get(labelId)!.color as BadgeColor"
-                size="sm"
-              >
-                {{ labelById.get(labelId)!.name }}
-              </UiBadge>
-            </template>
-          </div>
+          <LabelTags :ids="character.labelIds" class="pt-1" />
         </div>
         <template #actions>
           <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(character.id)">
             <UiIcon name="edit" />
           </UiButton>
-          <UiButton
-            variant="ghost"
-            icon
-            aria-label="Удалить"
-            @click="removeCharacter(character.id)"
-          >
+          <UiButton variant="ghost" icon aria-label="Удалить" @click="removeCharacter(character.id)">
             <UiIcon name="trash" />
           </UiButton>
         </template>
@@ -128,45 +86,7 @@
         </UiField>
 
         <UiField label="Лейблы">
-          <div class="space-y-3">
-            <div v-if="labels.length" class="flex flex-wrap gap-2">
-              <div v-for="label in labels" :key="label.id" class="inline-flex items-center gap-1">
-                <button type="button" class="cursor-pointer" @click="toggleSelectedLabel(label.id)">
-                  <UiBadge
-                    :color="label.color as BadgeColor"
-                    :outline="!selectedLabelIds.includes(label.id)"
-                    :class="selectedLabelIds.includes(label.id) ? '' : 'opacity-60'"
-                  >
-                    <UiIcon v-if="selectedLabelIds.includes(label.id)" name="check" :size="14" />
-                    {{ label.name }}
-                  </UiBadge>
-                </button>
-                <button
-                  type="button"
-                  class="flex size-11 items-center justify-center text-error/60 transition hover:text-error"
-                  aria-label="Удалить лейбл"
-                  @click="removeLabel(label.id)"
-                >
-                  <UiIcon name="close" :size="16" />
-                </button>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap items-end gap-2">
-              <div class="grow basis-40">
-                <UiInput v-model="newLabelName" placeholder="Новый лейбл" />
-              </div>
-              <UiButton
-                variant="secondary"
-                outline
-                :disabled="!newLabelName.trim()"
-                @click="createLabel"
-              >
-                <UiIcon name="tag" />
-                Создать
-              </UiButton>
-            </div>
-          </div>
+          <LabelPicker v-model="selectedLabelIds" @deleted="onLabelDeleted" />
         </UiField>
       </form>
 
@@ -192,12 +112,10 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiField from '@/components/ui/UiField.vue'
 import UiInput from '@/components/ui/UiInput.vue'
 import UiTextarea from '@/components/ui/UiTextarea.vue'
-import UiBadge from '@/components/ui/UiBadge.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
-
-type BadgeColor = 'primary' | 'secondary' | 'accent' | 'info' | 'success' | 'warning' | 'error'
-
-const DEFAULT_LABEL_COLOR: BadgeColor = 'primary'
+import LabelFilter from '@/components/LabelFilter.vue'
+import LabelPicker from '@/components/LabelPicker.vue'
+import LabelTags from '@/components/LabelTags.vue'
 
 interface CharacterForm {
   name: string
@@ -209,9 +127,6 @@ interface CharacterForm {
 const charactersStore = useCharactersStore()
 const labelsStore = useLabelsStore()
 const { characters, loading } = storeToRefs(charactersStore)
-const { labels } = storeToRefs(labelsStore)
-
-const labelById = computed(() => new Map(labels.value.map((label) => [label.id, label])))
 
 const activeFilter = ref<number[]>([])
 
@@ -222,20 +137,18 @@ const filteredCharacters = computed(() => {
   )
 })
 
-function toggleFilter(labelId: number) {
-  const index = activeFilter.value.indexOf(labelId)
-  if (index === -1) activeFilter.value.push(labelId)
-  else activeFilter.value.splice(index, 1)
-}
-
 function clearFilter() {
   activeFilter.value = []
+}
+
+function onLabelDeleted(id: number) {
+  activeFilter.value = activeFilter.value.filter((labelId) => labelId !== id)
+  charactersStore.load()
 }
 
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const selectedLabelIds = ref<number[]>([])
-const newLabelName = ref('')
 
 const { handleSubmit, errors, defineField, resetForm } = useForm<CharacterForm>({
   initialValues: { name: '', realName: '', title: '', note: '' },
@@ -251,33 +164,10 @@ const [note] = defineField('note')
 
 const modalTitle = computed(() => (editingId.value === null ? 'Внести персонажа' : 'Изменить запись'))
 
-function toggleSelectedLabel(labelId: number) {
-  const index = selectedLabelIds.value.indexOf(labelId)
-  if (index === -1) selectedLabelIds.value.push(labelId)
-  else selectedLabelIds.value.splice(index, 1)
-}
-
-async function createLabel() {
-  const trimmed = newLabelName.value.trim()
-  if (!trimmed) return
-  const id = await labelsStore.add(trimmed, DEFAULT_LABEL_COLOR)
-  if (id > 0 && !selectedLabelIds.value.includes(id)) selectedLabelIds.value.push(id)
-  newLabelName.value = ''
-}
-
-async function removeLabel(id: number) {
-  if (!window.confirm('Удалить этот лейбл? Он исчезнет у всех персонажей.')) return
-  await labelsStore.remove(id)
-  selectedLabelIds.value = selectedLabelIds.value.filter((labelId) => labelId !== id)
-  activeFilter.value = activeFilter.value.filter((labelId) => labelId !== id)
-  await charactersStore.load()
-}
-
 function closeModal() {
   modalOpen.value = false
   editingId.value = null
   selectedLabelIds.value = []
-  newLabelName.value = ''
   resetForm()
 }
 
@@ -285,7 +175,6 @@ function openCreate() {
   resetForm()
   editingId.value = null
   selectedLabelIds.value = []
-  newLabelName.value = ''
   modalOpen.value = true
 }
 
@@ -302,7 +191,6 @@ function openEdit(id: number) {
     },
   })
   selectedLabelIds.value = [...character.labelIds]
-  newLabelName.value = ''
   modalOpen.value = true
 }
 
