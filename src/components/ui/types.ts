@@ -8,3 +8,9 @@ export type BadgeColor =
   | 'warning'
   | 'error'
   | 'ghost'
+
+export interface FilterChipOption {
+  value: string | number
+  label: string
+  color?: BadgeColor
+}

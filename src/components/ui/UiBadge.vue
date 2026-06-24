@@ -30,5 +30,6 @@ const classes = computed(() => [
   `badge-${props.color}`,
   props.size === 'sm' ? 'badge-sm' : props.size === 'lg' ? 'badge-lg' : '',
   props.outline ? 'badge-outline' : '',
+  'whitespace-nowrap',
 ])
 </script>

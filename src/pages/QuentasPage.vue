@@ -25,7 +25,7 @@
                   <p class="text-base opacity-80">{{ quenta.race }} · {{ quenta.origin }}</p>
                 </div>
               </div>
-              <UiBadge color="primary" size="sm" outline>{{ quenta.birth }}</UiBadge>
+              <UiBadge color="primary" size="sm" outline class="shrink-0">{{ quenta.birth }}</UiBadge>
             </div>
             <p class="line-clamp-3 opacity-90">{{ quenta.summary }}</p>
           </div>
