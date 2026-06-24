@@ -12,6 +12,9 @@ export const upgrades: capSQLiteVersionUpgrade[] = [
   {
     toVersion: 1,
     statements: [
+      // Без FTS5: его модуль отсутствует в сборке sql.js, на которой работает
+      // jeep-sqlite в браузере, — иначе вся миграция откатывается и в web нет
+      // ни одной таблицы. Поиск по статьям реализован через LIKE (см. articles.ts).
       `CREATE TABLE IF NOT EXISTS articles (
         id         INTEGER PRIMARY KEY AUTOINCREMENT,
         title      TEXT NOT NULL,
@@ -21,23 +24,6 @@ export const upgrades: capSQLiteVersionUpgrade[] = [
         created_at TEXT NOT NULL DEFAULT (datetime('now')),
         is_builtin INTEGER NOT NULL DEFAULT 0
       );`,
-
-      // Полнотекстовый поиск по статьям (FTS5, внешний контент = таблица articles).
-      `CREATE VIRTUAL TABLE IF NOT EXISTS articles_fts USING fts5(
-        title, body, content='articles', content_rowid='id'
-      );`,
-
-      // Триггеры синхронизации FTS-индекса с таблицей articles.
-      `CREATE TRIGGER IF NOT EXISTS articles_ai AFTER INSERT ON articles BEGIN
-        INSERT INTO articles_fts(rowid, title, body) VALUES (new.id, new.title, new.body);
-      END;`,
-      `CREATE TRIGGER IF NOT EXISTS articles_ad AFTER DELETE ON articles BEGIN
-        INSERT INTO articles_fts(articles_fts, rowid, title, body) VALUES ('delete', old.id, old.title, old.body);
-      END;`,
-      `CREATE TRIGGER IF NOT EXISTS articles_au AFTER UPDATE ON articles BEGIN
-        INSERT INTO articles_fts(articles_fts, rowid, title, body) VALUES ('delete', old.id, old.title, old.body);
-        INSERT INTO articles_fts(rowid, title, body) VALUES (new.id, new.title, new.body);
-      END;`,
 
       // --- Начальные (встроенные) данные библиотеки. Замените на свои. ---
       // Если справочник большой — лучше собрать готовый app.db и подключить через copyFromAssets

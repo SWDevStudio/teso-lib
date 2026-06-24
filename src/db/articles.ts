@@ -27,12 +27,12 @@ export async function listArticles(): Promise<Article[]> {
 export async function searchArticles(term: string): Promise<Article[]> {
   const q = term.trim()
   if (!q) return listArticles()
+  const like = `%${q}%`
   const res = await getDb().query(
-    `SELECT a.* FROM articles_fts f
-     JOIN articles a ON a.id = f.rowid
-     WHERE articles_fts MATCH ?
-     ORDER BY rank;`,
-    [q],
+    `SELECT * FROM articles
+     WHERE title LIKE ? OR body LIKE ?
+     ORDER BY datetime(created_at) DESC, id DESC;`,
+    [like, like],
   )
   return (res.values ?? []) as Article[]
 }
