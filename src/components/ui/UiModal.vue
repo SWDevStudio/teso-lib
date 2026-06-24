@@ -7,15 +7,28 @@
       aria-modal="true"
       @keydown="onKeydown"
     >
-      <div ref="box" tabindex="-1" class="modal-box max-h-[85vh] focus:outline-none">
-        <header v-if="title || slots.header" class="mb-4 flex items-start justify-between gap-4">
-          <h3 class="text-lg font-semibold">{{ title }}</h3>
+      <div
+        ref="box"
+        tabindex="-1"
+        class="modal-box flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden rounded-none p-0 focus:outline-none sm:h-auto sm:max-h-[90vh] sm:max-w-2xl sm:rounded-box"
+      >
+        <header
+          class="flex shrink-0 items-center justify-between gap-4 border-b border-base-300 bg-base-100 px-4 py-3"
+        >
+          <h3 class="truncate text-lg font-semibold">{{ title }}</h3>
           <UiButton variant="ghost" icon aria-label="Закрыть" @click="close">
             <UiIcon name="close" :size="22" />
           </UiButton>
         </header>
-        <slot />
-        <footer v-if="slots.actions" class="modal-action">
+
+        <div class="grow overflow-y-auto px-4 py-4">
+          <slot />
+        </div>
+
+        <footer
+          v-if="slots.actions"
+          class="flex shrink-0 justify-end gap-2 border-t border-base-300 bg-base-100 px-4 py-3"
+        >
           <slot name="actions" />
         </footer>
       </div>
