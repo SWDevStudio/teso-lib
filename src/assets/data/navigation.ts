@@ -15,6 +15,15 @@ export interface Section {
 
 export const sections: Section[] = [
   {
+    name: 'rules',
+    path: '/rules',
+    label: 'Правила',
+    title: 'Правила',
+    description: 'Свод правил — на случай, если ты вдруг решишься их открыть',
+    icon: 'rules',
+    component: () => import('@/pages/RulesPage.vue'),
+  },
+  {
     name: 'creation',
     path: '/creation',
     label: 'Сотворение мира',
@@ -76,15 +85,6 @@ export const sections: Section[] = [
     description: 'Краткий свод о провинциях: кто их населяет, где престолы и чем памятны',
     icon: 'guide',
     component: () => import('@/pages/TamrielGuidePage.vue'),
-  },
-  {
-    name: 'rules',
-    path: '/rules',
-    label: 'Правила',
-    title: 'Правила',
-    description: 'Свод правил — на случай, если ты вдруг решишься их открыть',
-    icon: 'rules',
-    component: () => import('@/pages/RulesPage.vue'),
   },
 ]
 
