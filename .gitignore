@@ -37,3 +37,8 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Исходные .docx правил — тяжёлые, хранятся локально; в приложение идут
+# сгенерированные src/assets/data/rules.generated.ts и public/rules/*
+/rules/*.docx
+/convert-rules.mjs
