@@ -19,7 +19,7 @@ export const sections: Section[] = [
     path: '/rules',
     label: 'Правила',
     title: 'Правила',
-    description: 'Свод правил — на случай, если ты вдруг решишься их открыть',
+    description: 'Свод правил игры: бой, магия, ремёсла, состояния и многое другое',
     icon: 'rules',
     component: () => import('@/pages/RulesPage.vue'),
   },
