@@ -23,7 +23,17 @@ export interface CharacterTransfer {
   labels: string[]
 }
 
-export type Transfer = NoteTransfer | CharacterTransfer
+export interface QuentaTransfer {
+  kind: 'quenta'
+  name: string
+  race: string
+  birth: string
+  origin: string
+  summary: string
+  body: string
+}
+
+export type Transfer = NoteTransfer | CharacterTransfer | QuentaTransfer
 
 export class InvalidTransferError extends Error {}
 export class UnsupportedVersionError extends Error {
@@ -103,10 +113,17 @@ function toEnvelope(t: Transfer): object {
   if (t.kind === 'note') {
     return { t: 'n', v: SCHEMA_VERSION, d: { ti: t.title, bo: t.body, l: t.labels } }
   }
+  if (t.kind === 'character') {
+    return {
+      t: 'c',
+      v: SCHEMA_VERSION,
+      d: { na: t.name, rn: t.realName, ti: t.title, no: t.note, l: t.labels },
+    }
+  }
   return {
-    t: 'c',
+    t: 'q',
     v: SCHEMA_VERSION,
-    d: { na: t.name, rn: t.realName, ti: t.title, no: t.note, l: t.labels },
+    d: { na: t.name, ra: t.race, bi: t.birth, or: t.origin, su: t.summary, bo: t.body },
   }
 }
 
@@ -172,6 +189,17 @@ export async function decodeTransfer(scanned: string): Promise<Transfer> {
       title: asNullableString(d.ti),
       note: asNullableString(d.no),
       labels: asLabels(d.l),
+    }
+  }
+  if (env.t === 'q') {
+    return {
+      kind: 'quenta',
+      name: asString(d.na),
+      race: asString(d.ra),
+      birth: asString(d.bi),
+      origin: asString(d.or),
+      summary: asString(d.su),
+      body: asString(d.bo),
     }
   }
   throw new InvalidTransferError('Неизвестный тип записи в коде')

@@ -6,7 +6,7 @@ import { Capacitor } from '@capacitor/core'
 
 import App from './App.vue'
 import router from './router'
-import { initDb } from './db'
+import { initDb, seedBuiltinQuentas } from './db'
 import { initBackButton } from './composables/useBackButton'
 
 async function bootstrap() {
@@ -21,6 +21,7 @@ async function bootstrap() {
   }
 
   await initDb()
+  await seedBuiltinQuentas()
 
   const app = createApp(App)
   app.use(createPinia())

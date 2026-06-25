@@ -28,11 +28,12 @@
 </template>
 
 <script lang="ts">
-import type { Note, Character } from '@/db'
+import type { Note, Character, Quenta } from '@/db'
 
 export type ShareSource =
   | { kind: 'note'; note: Note }
   | { kind: 'character'; character: Character }
+  | { kind: 'quenta'; quenta: Quenta }
 </script>
 
 <script setup lang="ts">
@@ -53,15 +54,23 @@ const labelsStore = useLabelsStore()
 const qrUrl = ref<string | null>(null)
 const error = ref<string | null>(null)
 
-const modalTitle = computed(() =>
-  props.source?.kind === 'character' ? 'QR персонажа' : 'QR заметки',
-)
+const modalTitle = computed(() => {
+  switch (props.source?.kind) {
+    case 'character':
+      return 'QR персонажа'
+    case 'quenta':
+      return 'QR квенты'
+    default:
+      return 'QR заметки'
+  }
+})
 
 const entityTitle = computed(() => {
-  if (!props.source) return ''
-  return props.source.kind === 'note'
-    ? props.source.note.title.trim() || 'Заметка без названия'
-    : props.source.character.name
+  const source = props.source
+  if (!source) return ''
+  if (source.kind === 'note') return source.note.title.trim() || 'Заметка без названия'
+  if (source.kind === 'character') return source.character.name
+  return source.quenta.name
 })
 
 function labelNames(ids: number[]): string[] {
@@ -74,14 +83,26 @@ function buildTransfer(source: ShareSource): Transfer {
     const n = source.note
     return { kind: 'note', title: n.title, body: n.body, labels: labelNames(n.labelIds) }
   }
-  const c = source.character
+  if (source.kind === 'character') {
+    const c = source.character
+    return {
+      kind: 'character',
+      name: c.name,
+      realName: c.real_name,
+      title: c.title,
+      note: c.note,
+      labels: labelNames(c.labelIds),
+    }
+  }
+  const q = source.quenta
   return {
-    kind: 'character',
-    name: c.name,
-    realName: c.real_name,
-    title: c.title,
-    note: c.note,
-    labels: labelNames(c.labelIds),
+    kind: 'quenta',
+    name: q.name,
+    race: q.race,
+    birth: q.birth,
+    origin: q.origin,
+    summary: q.summary,
+    body: q.body,
   }
 }
 

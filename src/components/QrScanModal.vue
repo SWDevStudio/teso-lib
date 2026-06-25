@@ -60,9 +60,8 @@ function stopCamera() {
 async function importText(text: string): Promise<string> {
   const transfer = await decodeTransfer(text)
   const imported = await applyTransfer(transfer)
-  return imported.kind === 'note'
-    ? `Заметка «${imported.title}» добавлена`
-    : `Персонаж «${imported.title}» добавлен`
+  const label = { note: 'Заметка', character: 'Персонаж', quenta: 'Квента' }[imported.kind]
+  return `${label} «${imported.title}» добавлена`
 }
 
 async function onCameraScan(text: string) {
