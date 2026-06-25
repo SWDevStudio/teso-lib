@@ -41,6 +41,7 @@
 import { nextTick, ref, useSlots, watch } from 'vue'
 import UiButton from './UiButton.vue'
 import UiIcon from './UiIcon.vue'
+import { useBackHandler } from '@/composables/useBackButton'
 
 const props = defineProps<{
   modelValue: boolean
@@ -56,6 +57,8 @@ let previouslyFocused: HTMLElement | null = null
 function close() {
   emit('update:modelValue', false)
 }
+
+useBackHandler(() => props.modelValue, close)
 
 function focusableElements(): HTMLElement[] {
   if (!box.value) return []

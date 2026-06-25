@@ -154,6 +154,7 @@ import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { navLinks } from '@/router'
 import { useTheme } from '@/composables/useTheme'
+import { useBackHandler } from '@/composables/useBackButton'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiConfirm from '@/components/UiConfirm.vue'
 
@@ -163,6 +164,8 @@ const { theme, themeOptions } = useTheme()
 function closeDrawer() {
   drawerOpen.value = false
 }
+
+useBackHandler(drawerOpen, closeDrawer)
 
 function closeMenu() {
   ;(document.activeElement as HTMLElement | null)?.blur()

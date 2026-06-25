@@ -7,6 +7,7 @@ import { Capacitor } from '@capacitor/core'
 import App from './App.vue'
 import router from './router'
 import { initDb } from './db'
+import { initBackButton } from './composables/useBackButton'
 
 async function bootstrap() {
   // На web SQLite работает через web-компонент jeep-sqlite (sql.js + IndexedDB).
@@ -25,6 +26,8 @@ async function bootstrap() {
   app.use(createPinia())
   app.use(router)
   app.mount('#app')
+
+  initBackButton(router)
 }
 
 bootstrap().catch((err) => {

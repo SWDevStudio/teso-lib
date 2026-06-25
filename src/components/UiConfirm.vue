@@ -26,7 +26,10 @@
 
 <script setup lang="ts">
 import { useConfirmHost } from '@/composables/useConfirm'
+import { useBackHandler } from '@/composables/useBackButton'
 import UiButton from '@/components/ui/UiButton.vue'
 
 const { isOpen, options, respond } = useConfirmHost()
+
+useBackHandler(isOpen, () => respond(false))
 </script>
