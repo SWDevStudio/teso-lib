@@ -111,20 +111,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { locations, type TamrielLocation, type TowerStatus } from '@/assets/data/tamriel'
-import type { BadgeColor } from '@/components/ui/types'
+import { locations, type TamrielLocation } from '@/assets/data/tamriel'
+import { towerStatusMeta } from '@/assets/data/towers'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
 import UiBadge from '@/components/ui/UiBadge.vue'
 import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
-
-const towerStatusMeta: Record<TowerStatus, { label: string; color: BadgeColor }> = {
-  standing: { label: 'Цела', color: 'success' },
-  destroyed: { label: 'Разрушена', color: 'error' },
-  lost: { label: 'Утрачена', color: 'warning' },
-}
 
 const query = ref('')
 const selected = ref<TamrielLocation | null>(null)
