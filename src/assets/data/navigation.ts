@@ -42,15 +42,6 @@ export const sections: Section[] = [
     component: () => import('@/pages/PantheonPage.vue'),
   },
   {
-    name: 'towers',
-    path: '/towers',
-    label: 'Башни',
-    title: 'Башни Нирна',
-    description: 'Древние столпы, что стабилизируют Мундус: их Камни, история и статус',
-    icon: 'tower',
-    component: () => import('@/pages/TowersPage.vue'),
-  },
-  {
     name: 'characters',
     path: '/characters',
     label: 'Персонажи',
@@ -94,6 +85,15 @@ export const sections: Section[] = [
     description: 'Краткий свод о провинциях: кто их населяет, где престолы и чем памятны',
     icon: 'guide',
     component: () => import('@/pages/TamrielGuidePage.vue'),
+  },
+  {
+    name: 'towers',
+    path: '/towers',
+    label: 'Башни',
+    title: 'Башни Нирна',
+    description: 'Древние столпы, что стабилизируют Мундус: их Камни, история и статус',
+    icon: 'tower',
+    component: () => import('@/pages/TowersPage.vue'),
   },
 ]
 
