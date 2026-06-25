@@ -42,6 +42,15 @@ export const sections: Section[] = [
     component: () => import('@/pages/PantheonPage.vue'),
   },
   {
+    name: 'towers',
+    path: '/towers',
+    label: 'Башни',
+    title: 'Башни Нирна',
+    description: 'Древние столпы, что стабилизируют Мундус: их Камни, история и статус',
+    icon: 'tower',
+    component: () => import('@/pages/TowersPage.vue'),
+  },
+  {
     name: 'characters',
     path: '/characters',
     label: 'Персонажи',
