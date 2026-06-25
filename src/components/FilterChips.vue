@@ -29,27 +29,27 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string | number">
 import type { FilterChipOption } from '@/components/ui/types'
 import UiBadge from '@/components/ui/UiBadge.vue'
 import UiIcon from '@/components/ui/UiIcon.vue'
 
 const props = withDefaults(
   defineProps<{
-    options: FilterChipOption[]
-    modelValue: (string | number)[]
+    options: FilterChipOption<T>[]
+    modelValue: T[]
     allLabel?: string
   }>(),
   { allLabel: 'Все' },
 )
 
-const emit = defineEmits<{ 'update:modelValue': [value: (string | number)[]] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: T[]] }>()
 
-function isActive(value: string | number) {
+function isActive(value: T) {
   return props.modelValue.includes(value)
 }
 
-function toggle(value: string | number) {
+function toggle(value: T) {
   if (isActive(value)) {
     emit(
       'update:modelValue',

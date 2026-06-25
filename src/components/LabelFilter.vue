@@ -6,26 +6,23 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useLabelsStore } from '@/stores/labels'
-import type { BadgeColor, FilterChipOption } from '@/components/ui/types'
+import { toBadgeColor, type FilterChipOption } from '@/components/ui/types'
 import FilterChips from '@/components/FilterChips.vue'
 
-const props = defineProps<{ modelValue: number[] }>()
+defineProps<{ modelValue: number[] }>()
 const emit = defineEmits<{ 'update:modelValue': [value: number[]] }>()
 
 const { labels } = storeToRefs(useLabelsStore())
 
-const options = computed<FilterChipOption[]>(() =>
+const options = computed<FilterChipOption<number>[]>(() =>
   labels.value.map((label) => ({
     value: label.id,
     label: label.name,
-    color: label.color as BadgeColor,
+    color: toBadgeColor(label.color),
   })),
 )
 
-function onChange(value: (string | number)[]) {
-  emit(
-    'update:modelValue',
-    value.map((item) => Number(item)),
-  )
+function onChange(value: number[]) {
+  emit('update:modelValue', value)
 }
 </script>

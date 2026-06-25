@@ -8,7 +8,10 @@ import { marked } from 'marked'
 
 const props = defineProps<{ source: string }>()
 
-const html = computed(() => marked.parse(props.source ?? '', { async: false }) as string)
+const html = computed(() => {
+  const result = marked.parse(props.source ?? '', { async: false })
+  return typeof result === 'string' ? result : ''
+})
 </script>
 
 <style scoped>

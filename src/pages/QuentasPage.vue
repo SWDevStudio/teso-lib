@@ -42,11 +42,7 @@
                 <UiIcon name="quenta" :size="28" class="shrink-0 text-primary" />
                 <div class="min-w-0">
                   <h2 class="text-xl font-semibold">{{ quenta.name }}</h2>
-                  <p class="text-base opacity-80">
-                    <template v-if="quenta.race">{{ quenta.race }}</template>
-                    <template v-if="quenta.race && quenta.origin"> · </template>
-                    <template v-if="quenta.origin">{{ quenta.origin }}</template>
-                  </p>
+                  <p class="text-base opacity-80">{{ raceOrigin(quenta) }}</p>
                 </div>
               </div>
               <UiBadge v-if="quenta.birth" color="primary" size="sm" outline class="shrink-0">
@@ -59,7 +55,6 @@
       </button>
     </div>
 
-    <!-- Просмотр квенты -->
     <UiModal v-model="detailOpen" :title="selected?.name">
       <article v-if="selected" class="space-y-4">
         <div class="flex flex-wrap items-center gap-2 text-sm">
@@ -93,7 +88,6 @@
       </template>
     </UiModal>
 
-    <!-- Создание квенты -->
     <UiModal v-model="createOpen" title="Новая квента">
       <form id="quenta-form" class="space-y-4" @submit.prevent="onSubmit">
         <UiField label="Имя" :error="errors.name" required>
@@ -168,6 +162,10 @@ const detailOpen = computed({
   },
 })
 
+function raceOrigin(quenta: Quenta) {
+  return [quenta.race, quenta.origin].filter(Boolean).join(' · ')
+}
+
 function toTransfer(quenta: Quenta): QuentaTransfer {
   return {
     kind: 'quenta',
@@ -180,7 +178,6 @@ function toTransfer(quenta: Quenta): QuentaTransfer {
   }
 }
 
-// Какие квенты влезают в QR (учитывает сжатие) — только им показываем «Поделиться».
 const shareableIds = ref<Set<number>>(new Set())
 watch(
   quentas,

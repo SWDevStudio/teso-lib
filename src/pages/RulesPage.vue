@@ -86,10 +86,7 @@
             <UiIcon :name="doc.icon" :size="32" class="shrink-0 text-primary" />
             <div class="min-w-0">
               <h2 class="text-xl font-semibold">{{ doc.title }}</h2>
-              <p class="text-sm opacity-60">
-                {{ doc.sections.length }} {{ sectionWord(doc.sections.length) }} · версия
-                {{ doc.version }}
-              </p>
+              <p class="text-sm opacity-60">{{ docMeta(doc) }}</p>
             </div>
           </div>
         </UiCard>
@@ -125,7 +122,7 @@
         >
           <img
             :src="src"
-            :alt="`Краткое руководство — страница ${index + 1}`"
+            :alt="pageAlt(index)"
             class="w-full rounded-lg border border-base-300"
             loading="lazy"
           />
@@ -227,6 +224,14 @@ function sectionWord(count: number) {
   if (mod10 === 1 && mod100 !== 11) return 'раздел'
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'раздела'
   return 'разделов'
+}
+
+function docMeta(doc: RuleDocType) {
+  return `${doc.sections.length} ${sectionWord(doc.sections.length)} · версия ${doc.version}`
+}
+
+function pageAlt(index: number) {
+  return `Краткое руководство — страница ${index + 1}`
 }
 
 function openDoc(doc: RuleDocType) {

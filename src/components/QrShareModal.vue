@@ -80,29 +80,29 @@ function labelNames(ids: number[]): string[] {
 
 function buildTransfer(source: ShareSource): Transfer {
   if (source.kind === 'note') {
-    const n = source.note
-    return { kind: 'note', title: n.title, body: n.body, labels: labelNames(n.labelIds) }
+    const note = source.note
+    return { kind: 'note', title: note.title, body: note.body, labels: labelNames(note.labelIds) }
   }
   if (source.kind === 'character') {
-    const c = source.character
+    const character = source.character
     return {
       kind: 'character',
-      name: c.name,
-      realName: c.real_name,
-      title: c.title,
-      note: c.note,
-      labels: labelNames(c.labelIds),
+      name: character.name,
+      realName: character.real_name,
+      title: character.title,
+      note: character.note,
+      labels: labelNames(character.labelIds),
     }
   }
-  const q = source.quenta
+  const quenta = source.quenta
   return {
     kind: 'quenta',
-    name: q.name,
-    race: q.race,
-    birth: q.birth,
-    origin: q.origin,
-    summary: q.summary,
-    body: q.body,
+    name: quenta.name,
+    race: quenta.race,
+    birth: quenta.birth,
+    origin: quenta.origin,
+    summary: quenta.summary,
+    body: quenta.body,
   }
 }
 

@@ -133,21 +133,21 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 import FilterChips from '@/components/FilterChips.vue'
-import type { BadgeColor, FilterChipOption } from '@/components/ui/types'
+import type { FilterChipOption } from '@/components/ui/types'
 
 const query = ref('')
 const activeRegions = ref<HouseRegion[]>([])
 
-const regionOptions = computed<FilterChipOption[]>(() =>
+const regionOptions = computed<FilterChipOption<HouseRegion>[]>(() =>
   regions.map((region) => ({
     value: region.id,
     label: region.label,
-    color: 'primary' as BadgeColor,
+    color: 'primary',
   })),
 )
 
-function onRegionChange(value: (string | number)[]) {
-  activeRegions.value = value as HouseRegion[]
+function onRegionChange(value: HouseRegion[]) {
+  activeRegions.value = value
 }
 const selected = ref<House | null>(null)
 

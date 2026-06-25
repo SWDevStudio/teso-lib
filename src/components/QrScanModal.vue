@@ -68,15 +68,14 @@ async function onCameraScan(text: string) {
   if (busy || outcome.value) return
   busy = true
   try {
-    const text2 = await importText(text)
+    const successMessage = await importText(text)
     stopCamera()
-    outcome.value = { ok: true, text: text2 }
+    outcome.value = { ok: true, text: successMessage }
   } catch (e) {
     if (e instanceof UnsupportedVersionError) {
       stopCamera()
       outcome.value = { ok: false, text: e.message }
     } else {
-      // Не наш код — не прерываем сканирование, ждём нужный QR.
       message.value = 'Это не код приложения — наведите на нужный QR.'
       cameraError.value = false
     }
@@ -88,7 +87,7 @@ async function onCameraScan(text: string) {
 async function startCamera() {
   await nextTick()
   if (!videoEl.value) return
-  scanner = new QrScanner(videoEl.value, (r) => void onCameraScan(r.data), {
+  scanner = new QrScanner(videoEl.value, (result) => void onCameraScan(result.data), {
     returnDetailedScanResult: true,
     highlightScanRegion: true,
   })
@@ -103,11 +102,13 @@ async function startCamera() {
 }
 
 async function onFile(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0]
+  const input = event.currentTarget
+  if (!(input instanceof HTMLInputElement)) return
+  const file = input.files?.[0]
   if (!file) return
   try {
-    const r = await QrScanner.scanImage(file, { returnDetailedScanResult: true })
-    const text = await importText(r.data)
+    const result = await QrScanner.scanImage(file, { returnDetailedScanResult: true })
+    const text = await importText(result.data)
     stopCamera()
     outcome.value = { ok: true, text }
   } catch (e) {

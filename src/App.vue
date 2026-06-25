@@ -175,7 +175,8 @@ function closeDrawer() {
 useBackHandler(drawerOpen, closeDrawer)
 
 function closeMenu() {
-  ;(document.activeElement as HTMLElement | null)?.blur()
+  const active = document.activeElement
+  if (active instanceof HTMLElement) active.blur()
 }
 </script>
 

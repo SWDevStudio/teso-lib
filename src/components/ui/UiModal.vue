@@ -96,7 +96,8 @@ watch(
   () => props.modelValue,
   async (open) => {
     if (open) {
-      previouslyFocused = document.activeElement as HTMLElement | null
+      const active = document.activeElement
+      previouslyFocused = active instanceof HTMLElement ? active : null
       await nextTick()
       const elements = focusableElements()
       ;(elements[0] ?? box.value)?.focus()

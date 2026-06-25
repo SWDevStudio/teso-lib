@@ -19,7 +19,7 @@
         v-if="craftDoc"
         type="button"
         class="btn btn-outline btn-primary btn-sm"
-        @click="emit('open-craft', selected.craftSlug!)"
+        @click="emit('open-craft', craftDoc.id)"
       >
         <UiIcon :name="craftDoc.icon" :size="18" />
         Полные правила: {{ craftDoc.title }}
@@ -32,8 +32,8 @@
           v-for="section in selected.sections"
           :key="section.id"
           :section="section"
-          :open-ids="emptyOpen"
-          :on-toggle="noop"
+          :open-ids="classOpen"
+          :on-toggle="toggleClass"
         />
       </div>
     </div>
@@ -91,6 +91,7 @@
 import { computed, ref } from 'vue'
 import { ruleClasses, ruleDocs, type RuleClass } from '@/assets/data/rules.generated'
 import { useBackHandler } from '@/composables/useBackButton'
+import { useRuleToggle } from '@/composables/useRuleToggle'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
@@ -101,8 +102,8 @@ const emit = defineEmits<{ 'open-craft': [slug: string] }>()
 
 const query = ref('')
 const selected = ref<RuleClass | null>(null)
-const generalOpen = ref(new Set<string>())
-const emptyOpen = ref(new Set<string>())
+const { openIds: generalOpen, onToggle: toggleGeneral } = useRuleToggle()
+const { openIds: classOpen, onToggle: toggleClass } = useRuleToggle()
 
 const trimmedQuery = computed(() => query.value.trim())
 
@@ -127,13 +128,4 @@ useBackHandler(
   },
 )
 
-function toggleGeneral(id: string, event: Event) {
-  const open = (event.target as HTMLDetailsElement).open
-  const next = new Set(generalOpen.value)
-  if (open) next.add(id)
-  else next.delete(id)
-  generalOpen.value = next
-}
-
-function noop() {}
 </script>

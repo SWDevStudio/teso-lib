@@ -14,22 +14,15 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, watch } from 'vue'
 import type { RuleDoc, RuleSection } from '@/assets/data/rules.generated'
+import { useRuleToggle } from '@/composables/useRuleToggle'
 import RuleContent from './RuleContent.vue'
 import RuleSectionNode from './RuleSectionNode.vue'
 
 const props = defineProps<{ doc: RuleDoc; targetSectionId?: string | null }>()
 
-const openIds = ref(new Set<string>())
-
-function onToggle(id: string, event: Event) {
-  const open = (event.target as HTMLDetailsElement).open
-  const next = new Set(openIds.value)
-  if (open) next.add(id)
-  else next.delete(id)
-  openIds.value = next
-}
+const { openIds, onToggle } = useRuleToggle()
 
 function findPath(sections: RuleSection[], id: string, acc: string[] = []): string[] | null {
   for (const section of sections) {

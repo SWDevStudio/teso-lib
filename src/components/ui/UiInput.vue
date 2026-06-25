@@ -1,19 +1,19 @@
 <template>
   <input
+    v-model="model"
     :type="type"
-    :value="modelValue"
     :placeholder="placeholder"
     :disabled="disabled"
     class="input w-full"
     :class="{ 'input-error': invalid }"
-    @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
 </template>
 
 <script setup lang="ts">
+const model = defineModel<string>({ required: true })
+
 withDefaults(
   defineProps<{
-    modelValue: string
     type?: string
     placeholder?: string
     disabled?: boolean
@@ -21,6 +21,4 @@ withDefaults(
   }>(),
   { type: 'text' },
 )
-
-defineEmits<{ 'update:modelValue': [value: string] }>()
 </script>

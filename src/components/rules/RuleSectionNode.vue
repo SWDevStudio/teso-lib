@@ -6,10 +6,7 @@
     :open="openIds.has(section.id)"
     @toggle="onToggle(section.id, $event)"
   >
-    <summary
-      class="collapse-title min-h-0 py-3 font-semibold"
-      :class="section.level === 1 ? 'text-lg' : ''"
-    >
+    <summary class="collapse-title min-h-0 py-3 font-semibold" :class="summaryClass">
       {{ section.title }}
     </summary>
     <div class="collapse-content space-y-2">
@@ -25,11 +22,7 @@
   </details>
 
   <div v-else :id="section.id" class="space-y-1">
-    <component
-      :is="section.level >= 4 ? 'h5' : 'h4'"
-      class="pt-2 font-bold text-primary"
-      :class="section.level >= 4 ? 'text-sm opacity-90' : ''"
-    >
+    <component :is="headingTag" class="pt-2 font-bold text-primary" :class="headingClass">
       {{ section.title }}
     </component>
     <RuleContent v-if="section.html" :html="section.html" />
@@ -44,12 +37,17 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { RuleSection } from '@/assets/data/rules.generated'
 import RuleContent from './RuleContent.vue'
 
-defineProps<{
+const props = defineProps<{
   section: RuleSection
   openIds: Set<string>
   onToggle: (id: string, event: Event) => void
 }>()
+
+const summaryClass = computed(() => (props.section.level === 1 ? 'text-lg' : ''))
+const headingTag = computed(() => (props.section.level >= 4 ? 'h5' : 'h4'))
+const headingClass = computed(() => (props.section.level >= 4 ? 'text-sm opacity-90' : ''))
 </script>
