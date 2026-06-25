@@ -72,9 +72,14 @@
                   <p class="text-base opacity-80">{{ deity.domain }}</p>
                 </div>
               </div>
-              <UiBadge :color="deity.revered ? 'success' : 'error'" size="sm">
-                {{ deity.revered ? 'Почитаем' : 'Отвергнут' }}
-              </UiBadge>
+              <div class="flex shrink-0 flex-col items-end gap-1">
+                <UiBadge :color="deity.revered ? 'success' : 'error'" size="sm">
+                  {{ deity.revered ? 'Почитаем' : 'Отвергнут' }}
+                </UiBadge>
+                <UiBadge :color="natureMeta[deity.nature].color" size="sm">
+                  {{ natureMeta[deity.nature].label }}
+                </UiBadge>
+              </div>
             </div>
 
             <p class="line-clamp-2 opacity-90">{{ deity.shortDesc }}</p>
@@ -98,6 +103,9 @@
         <div class="flex flex-wrap items-center gap-3">
           <UiBadge :color="selected.revered ? 'success' : 'error'">
             {{ selected.revered ? 'Почитаем' : 'Отвергнут' }}
+          </UiBadge>
+          <UiBadge :color="natureMeta[selected.nature].color">
+            {{ natureMeta[selected.nature].label }}
           </UiBadge>
           <span class="text-base opacity-80">{{ selected.domain }}</span>
         </div>
@@ -131,7 +139,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { goodDeities, badDeities, type Deity } from '@/assets/data/pantheon'
+import { goodDeities, badDeities, type Deity, type DeityNature } from '@/assets/data/pantheon'
+import type { BadgeColor } from '@/components/ui/types'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
 import UiBadge from '@/components/ui/UiBadge.vue'
@@ -140,6 +149,13 @@ import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 
 type Category = 'good' | 'bad'
+
+const natureMeta: Record<DeityNature, { label: string; color: BadgeColor }> = {
+  aedra: { label: 'Аэдра', color: 'info' },
+  daedra: { label: 'Даэдра', color: 'warning' },
+  ancestor: { label: 'Предок-герой', color: 'accent' },
+  lorkhan: { label: 'Бог-Труп', color: 'neutral' },
+}
 
 const query = ref('')
 const activeCategory = ref<Category>('good')
