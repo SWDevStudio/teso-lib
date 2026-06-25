@@ -12,6 +12,7 @@ import IconQuenta from '~icons/game-icons/scroll-unfurled'
 import IconGood from '~icons/game-icons/holy-symbol'
 import IconBad from '~icons/game-icons/daemon-skull'
 import IconTitle from '~icons/game-icons/laurel-crown'
+import IconTower from '~icons/game-icons/white-tower'
 
 import IconPlus from '~icons/lucide/plus'
 import IconSearch from '~icons/lucide/search'
@@ -45,6 +46,7 @@ export const icons = {
   good: IconGood,
   bad: IconBad,
   title: IconTitle,
+  tower: IconTower,
   plus: IconPlus,
   search: IconSearch,
   trash: IconTrash,

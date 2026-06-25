@@ -50,6 +50,16 @@
               <UiBadge color="secondary" size="sm">{{ location.capital }}</UiBadge>
             </div>
 
+            <div v-if="location.tower" class="flex flex-wrap items-center gap-2 text-sm">
+              <span class="flex min-w-0 items-center gap-1.5">
+                <UiIcon name="tower" :size="16" class="shrink-0 text-primary/80" />
+                <span class="truncate opacity-80">{{ location.tower.name }}</span>
+              </span>
+              <UiBadge :color="towerStatusMeta[location.tower.status].color" size="sm">
+                {{ towerStatusMeta[location.tower.status].label }}
+              </UiBadge>
+            </div>
+
             <p class="line-clamp-2 opacity-90">{{ location.shortDesc }}</p>
           </div>
         </UiCard>
@@ -77,6 +87,20 @@
 
         <p class="italic opacity-80">{{ selected.oneLine }}</p>
 
+        <div
+          v-if="selected.tower"
+          class="space-y-1.5 rounded-box border border-primary/30 bg-primary/5 p-3"
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <UiIcon name="tower" :size="20" class="shrink-0 text-primary" />
+            <span class="font-semibold">{{ selected.tower.name }}</span>
+            <UiBadge :color="towerStatusMeta[selected.tower.status].color" size="sm">
+              {{ towerStatusMeta[selected.tower.status].label }}
+            </UiBadge>
+          </div>
+          <p class="text-sm opacity-90">{{ selected.tower.note }}</p>
+        </div>
+
         <div class="divider my-1" />
 
         <UiMarkdown :source="selected.fullText" />
@@ -87,13 +111,20 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { locations, type TamrielLocation } from '@/assets/data/tamriel'
+import { locations, type TamrielLocation, type TowerStatus } from '@/assets/data/tamriel'
+import type { BadgeColor } from '@/components/ui/types'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
 import UiBadge from '@/components/ui/UiBadge.vue'
 import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
+
+const towerStatusMeta: Record<TowerStatus, { label: string; color: BadgeColor }> = {
+  standing: { label: 'Цела', color: 'success' },
+  destroyed: { label: 'Разрушена', color: 'error' },
+  lost: { label: 'Утрачена', color: 'warning' },
+}
 
 const query = ref('')
 const selected = ref<TamrielLocation | null>(null)
