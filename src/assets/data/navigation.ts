@@ -24,6 +24,15 @@ export const sections: Section[] = [
     component: () => import('@/pages/RulesPage.vue'),
   },
   {
+    name: 'classes',
+    path: '/classes',
+    label: 'Классы',
+    title: 'Классы',
+    description: 'Навыки и способности классов по уровням мастерства',
+    icon: 'classes',
+    component: () => import('@/pages/ClassesPage.vue'),
+  },
+  {
     name: 'creation',
     path: '/creation',
     label: 'Сотворение мира',
