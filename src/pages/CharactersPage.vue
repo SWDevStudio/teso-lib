@@ -49,7 +49,9 @@
       <UiCard v-for="character in filteredCharacters" :key="character.id">
         <div class="space-y-2">
           <h3 class="text-xl font-semibold">
-            <span v-if="character.title" class="font-normal opacity-80">{{ character.title }} </span>
+            <span v-if="character.title" class="font-normal opacity-80"
+              >{{ character.title }}
+            </span>
             {{ character.name }}
           </h3>
           <p v-if="character.note" class="whitespace-pre-wrap opacity-90">{{ character.note }}</p>
@@ -79,7 +81,12 @@
           <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(character.id)">
             <UiIcon name="edit" />
           </UiButton>
-          <UiButton variant="ghost" icon aria-label="Удалить" @click="removeCharacter(character.id)">
+          <UiButton
+            variant="ghost"
+            icon
+            aria-label="Удалить"
+            @click="removeCharacter(character.id)"
+          >
             <UiIcon name="trash" />
           </UiButton>
         </template>
@@ -124,7 +131,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { useClipboard } from '@vueuse/core'
@@ -154,6 +162,7 @@ interface CharacterForm {
   note: string
 }
 
+const route = useRoute()
 const charactersStore = useCharactersStore()
 const labelsStore = useLabelsStore()
 const { characters, loading } = storeToRefs(charactersStore)
@@ -215,7 +224,9 @@ const [realName] = defineField('realName')
 const [title] = defineField('title')
 const [note] = defineField('note')
 
-const modalTitle = computed(() => (editingId.value === null ? 'Внести персонажа' : 'Изменить запись'))
+const modalTitle = computed(() =>
+  editingId.value === null ? 'Внести персонажа' : 'Изменить запись',
+)
 
 function closeModal() {
   modalOpen.value = false
@@ -246,6 +257,20 @@ function openEdit(id: number) {
   selectedLabelIds.value = [...character.labelIds]
   modalOpen.value = true
 }
+
+watch(
+  [() => route.query.open, characters],
+  ([openId]) => {
+    if (typeof openId !== 'string') return
+    if (characters.value.length === 0) {
+      charactersStore.load()
+      return
+    }
+    const character = characters.value.find((item) => String(item.id) === openId)
+    if (character) openEdit(character.id)
+  },
+  { immediate: true },
+)
 
 const onSubmit = handleSubmit(async (values) => {
   const input: CharacterInput = {

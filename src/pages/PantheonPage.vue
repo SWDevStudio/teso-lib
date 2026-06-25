@@ -138,7 +138,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { goodDeities, badDeities, type Deity, type DeityNature } from '@/assets/data/pantheon'
 import type { BadgeColor } from '@/components/ui/types'
 import UiIcon from '@/components/ui/UiIcon.vue'
@@ -179,4 +180,18 @@ const filteredDeities = computed(() => {
 function open(deity: Deity) {
   selected.value = deity
 }
+
+const route = useRoute()
+
+watch(
+  () => route.query.open,
+  (openId) => {
+    if (!openId) return
+    const deity = [...goodDeities, ...badDeities].find((item) => item.id === openId)
+    if (!deity) return
+    activeCategory.value = deity.category
+    open(deity)
+  },
+  { immediate: true },
+)
 </script>

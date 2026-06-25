@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ruleClasses, ruleDocs, type RuleClass } from '@/assets/data/rules.generated'
 import { useBackHandler } from '@/composables/useBackButton'
 import { useRuleToggle } from '@/composables/useRuleToggle'
@@ -98,6 +98,7 @@ import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 import RuleContent from './RuleContent.vue'
 import RuleSectionNode from './RuleSectionNode.vue'
 
+const props = defineProps<{ targetClassId?: string | null }>()
 const emit = defineEmits<{ 'open-craft': [slug: string] }>()
 
 const query = ref('')
@@ -121,11 +122,20 @@ const craftDoc = computed(() =>
     : null,
 )
 
+watch(
+  () => props.targetClassId,
+  (id) => {
+    if (!id) return
+    const found = ruleClasses.classes.find((item) => item.id === id)
+    if (found) selected.value = found
+  },
+  { immediate: true },
+)
+
 useBackHandler(
   () => selected.value !== null,
   () => {
     selected.value = null
   },
 )
-
 </script>

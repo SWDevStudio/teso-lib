@@ -4,6 +4,7 @@
 
     <UiConfirm />
     <QrScanModal v-model="scanOpen" />
+    <GlobalSearch v-model="searchOpen" />
 
     <div class="drawer-content flex min-h-screen flex-col bg-base-200 text-base-content">
       <header
@@ -55,6 +56,9 @@
         </nav>
 
         <div class="navbar-end gap-1">
+          <UiButton variant="ghost" icon aria-label="Поиск по всему" @click="searchOpen = true">
+            <UiIcon name="search" :size="22" />
+          </UiButton>
           <UiButton variant="ghost" icon aria-label="Сканировать QR" @click="scanOpen = true">
             <UiIcon name="scan" :size="22" />
           </UiButton>
@@ -163,9 +167,11 @@ import UiIcon from '@/components/ui/UiIcon.vue'
 import UiButton from '@/components/ui/UiButton.vue'
 import UiConfirm from '@/components/UiConfirm.vue'
 import QrScanModal from '@/components/QrScanModal.vue'
+import GlobalSearch from '@/components/GlobalSearch.vue'
 
 const drawerOpen = ref(false)
 const scanOpen = ref(false)
+const searchOpen = ref(false)
 const { theme, themeOptions } = useTheme()
 
 function closeDrawer() {

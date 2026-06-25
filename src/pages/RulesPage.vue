@@ -106,7 +106,11 @@
     </UiModal>
 
     <UiModal v-model="classesOpen" title="Классы">
-      <RuleClassesView v-if="classesOpen" @open-craft="onOpenCraft" />
+      <RuleClassesView
+        v-if="classesOpen"
+        :target-class-id="targetClassId"
+        @open-craft="onOpenCraft"
+      />
     </UiModal>
 
     <UiModal v-model="originalOpen" title="Краткое руководство — оригинал">
@@ -133,7 +137,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import {
   ruleClasses,
   ruleDocs,
@@ -155,9 +160,12 @@ interface SearchResult {
   snippet: string
 }
 
+const route = useRoute()
+
 const query = ref('')
 const selectedDoc = ref<RuleDocType | null>(null)
 const targetSectionId = ref<string | null>(null)
+const targetClassId = ref<string | null>(null)
 const classesOpen = ref(false)
 const originalOpen = ref(false)
 
@@ -249,4 +257,30 @@ function onOpenCraft(slug: string) {
   const doc = ruleDocs.find((item) => item.id === slug)
   if (doc) openDoc(doc)
 }
+
+function queryValue(value: unknown): string | null {
+  if (Array.isArray(value)) return typeof value[0] === 'string' ? value[0] : null
+  return typeof value === 'string' ? value : null
+}
+
+watch(
+  () => route.query,
+  (q) => {
+    const classes = queryValue(q.classes)
+    if (classes) {
+      targetClassId.value = queryValue(q.class)
+      classesOpen.value = true
+      return
+    }
+
+    const docId = queryValue(q.doc)
+    if (!docId) return
+    const doc =
+      docId === 'quick' ? quickGuide : (ruleDocs.find((item) => item.id === docId) ?? null)
+    if (!doc) return
+    targetSectionId.value = queryValue(q.section)
+    selectedDoc.value = doc
+  },
+  { immediate: true },
+)
 </script>

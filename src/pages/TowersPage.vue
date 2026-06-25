@@ -73,7 +73,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { towers, towerStatusMeta, type Tower } from '@/assets/data/towers'
 import TowerCard from '@/components/TowerCard.vue'
 import UiIcon from '@/components/ui/UiIcon.vue'
@@ -81,6 +82,8 @@ import UiBadge from '@/components/ui/UiBadge.vue'
 import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
+
+const route = useRoute()
 
 const query = ref('')
 const selected = ref<Tower | null>(null)
@@ -110,4 +113,14 @@ const filtered = computed(() => {
 function open(tower: Tower) {
   selected.value = tower
 }
+
+watch(
+  () => route.query.open,
+  (id) => {
+    if (!id) return
+    const tower = towers.find((item) => item.id === id)
+    if (tower) open(tower)
+  },
+  { immediate: true },
+)
 </script>

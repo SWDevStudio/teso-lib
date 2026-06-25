@@ -41,7 +41,9 @@
                 <UiIcon name="houses" :size="28" class="shrink-0 text-primary" />
                 <div class="min-w-0">
                   <h2 class="text-xl font-semibold">{{ house.name }}</h2>
-                  <p class="text-base opacity-80">{{ house.race }} · {{ regionLabel[house.region] }}</p>
+                  <p class="text-base opacity-80">
+                    {{ house.race }} · {{ regionLabel[house.region] }}
+                  </p>
                 </div>
               </div>
               <UiBadge :color="house.fallen ? 'error' : 'success'" size="sm">
@@ -124,7 +126,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { houses, regions, regionLabel, type House, type HouseRegion } from '@/assets/data/houses'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
@@ -174,4 +177,16 @@ const filteredHouses = computed(() => {
 function open(house: House) {
   selected.value = house
 }
+
+const route = useRoute()
+
+watch(
+  () => route.query.open,
+  (id) => {
+    if (typeof id !== 'string') return
+    const house = houses.find((item) => item.id === id)
+    if (house) open(house)
+  },
+  { immediate: true },
+)
 </script>

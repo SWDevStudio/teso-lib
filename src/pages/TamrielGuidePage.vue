@@ -110,7 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { locations, type TamrielLocation } from '@/assets/data/tamriel'
 import { towerStatusMeta } from '@/assets/data/towers'
 import UiIcon from '@/components/ui/UiIcon.vue'
@@ -120,6 +121,7 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 
+const route = useRoute()
 const query = ref('')
 const selected = ref<TamrielLocation | null>(null)
 
@@ -143,4 +145,14 @@ const filteredLocations = computed(() => {
 function open(location: TamrielLocation) {
   selected.value = location
 }
+
+watch(
+  () => route.query.open,
+  (id) => {
+    if (typeof id !== 'string') return
+    const location = locations.find((item) => item.id === id)
+    if (location) open(location)
+  },
+  { immediate: true },
+)
 </script>

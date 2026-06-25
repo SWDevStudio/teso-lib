@@ -58,7 +58,9 @@
     <UiModal v-model="detailOpen" :title="selected?.name">
       <article v-if="selected" class="space-y-4">
         <div class="flex flex-wrap items-center gap-2 text-sm">
-          <UiBadge v-if="selected.race" color="primary" size="sm" outline>{{ selected.race }}</UiBadge>
+          <UiBadge v-if="selected.race" color="primary" size="sm" outline>{{
+            selected.race
+          }}</UiBadge>
           <UiBadge v-if="selected.birth" color="secondary" size="sm" outline>
             {{ selected.birth }}
           </UiBadge>
@@ -123,6 +125,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { useConfirm } from '@/composables/useConfirm'
@@ -153,6 +156,7 @@ interface QuentaForm {
 const store = useQuentasStore()
 const { quentas, loading } = storeToRefs(store)
 const { confirm } = useConfirm()
+const route = useRoute()
 
 const selected = ref<Quenta | null>(null)
 const detailOpen = computed({
@@ -161,6 +165,20 @@ const detailOpen = computed({
     if (!value) selected.value = null
   },
 })
+
+function openFromQuery() {
+  const open = route.query.open
+  if (typeof open !== 'string') return
+  if (quentas.value.length === 0) {
+    store.load()
+    return
+  }
+  const match = quentas.value.find((q) => String(q.id) === open)
+  if (match) selected.value = match
+}
+
+watch(() => route.query.open, openFromQuery, { immediate: true })
+watch(quentas, openFromQuery)
 
 function raceOrigin(quenta: Quenta) {
   return [quenta.race, quenta.origin].filter(Boolean).join(' · ')

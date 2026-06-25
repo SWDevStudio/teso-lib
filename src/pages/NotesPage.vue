@@ -98,7 +98,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
 import { useConfirm } from '@/composables/useConfirm'
@@ -122,6 +123,7 @@ import { TRANSFER_LIMITS as LIMITS, noteWithinLimits } from '@/lib/transfer-limi
 
 const store = useNotesStore()
 const labelsStore = useLabelsStore()
+const route = useRoute()
 const { notes, loading } = storeToRefs(store)
 
 const activeFilter = ref<number[]>([])
@@ -227,4 +229,20 @@ onMounted(() => {
   store.load()
   labelsStore.load()
 })
+
+watch(
+  [() => route.query.open, notes],
+  ([open]) => {
+    if (open === undefined || open === null) return
+    const id = Number(open)
+    if (Number.isNaN(id)) return
+    const note = notes.value.find((n) => n.id === id)
+    if (note) {
+      openEdit(note)
+    } else if (notes.value.length === 0 && !loading.value) {
+      store.load()
+    }
+  },
+  { immediate: true },
+)
 </script>
