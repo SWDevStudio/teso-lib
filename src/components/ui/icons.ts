@@ -37,6 +37,15 @@ import IconSmithing from '~icons/game-icons/anvil'
 import IconGardening from '~icons/game-icons/flower-pot'
 import IconFaith from '~icons/game-icons/prayer'
 import IconEnchanting from '~icons/game-icons/magic-swirl'
+import IconClasses from '~icons/game-icons/battle-gear'
+import IconWarrior from '~icons/game-icons/broadsword'
+import IconMage from '~icons/game-icons/wizard-staff'
+import IconThief from '~icons/game-icons/hooded-figure'
+import IconJeweler from '~icons/game-icons/gems'
+import IconBuilder from '~icons/game-icons/stone-wall'
+import IconManager from '~icons/game-icons/two-coins'
+import IconInnovator from '~icons/game-icons/gears'
+import IconCommander from '~icons/game-icons/rank-3'
 
 export const icons = {
   creation: IconCreation,
@@ -75,6 +84,16 @@ export const icons = {
   gardening: IconGardening,
   faith: IconFaith,
   enchanting: IconEnchanting,
+  classes: IconClasses,
+  warrior: IconWarrior,
+  mage: IconMage,
+  thief: IconThief,
+  priest: IconGood,
+  jeweler: IconJeweler,
+  builder: IconBuilder,
+  manager: IconManager,
+  innovator: IconInnovator,
+  commander: IconCommander,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons

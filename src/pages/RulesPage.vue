@@ -77,7 +77,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import {
   ruleDocs,
   type RuleDoc as RuleDocType,
@@ -129,17 +130,29 @@ function buildSnippet(text: string, needle: string) {
   return head + hit + tail
 }
 
+function collectMatches(
+  doc: RuleDocType,
+  sections: RuleSection[],
+  needle: string,
+  found: SearchResult[],
+) {
+  for (const section of sections) {
+    if (section.text.toLowerCase().includes(needle)) {
+      found.push({ doc, section, snippet: buildSnippet(section.text, needle) })
+    }
+    if (found.length >= 80) return
+    collectMatches(doc, section.children, needle, found)
+    if (found.length >= 80) return
+  }
+}
+
 const results = computed<SearchResult[]>(() => {
   const needle = trimmedQuery.value.toLowerCase()
   if (!needle) return []
   const found: SearchResult[] = []
   for (const doc of ruleDocs) {
-    for (const section of doc.sections) {
-      if (section.text.toLowerCase().includes(needle)) {
-        found.push({ doc, section, snippet: buildSnippet(section.text, needle) })
-        if (found.length >= 80) return found
-      }
-    }
+    collectMatches(doc, doc.sections, needle, found)
+    if (found.length >= 80) break
   }
   return found
 })
@@ -161,4 +174,16 @@ function openResult(result: SearchResult) {
   targetSectionId.value = result.section.id
   selectedDoc.value = result.doc
 }
+
+const route = useRoute()
+
+watch(
+  () => route.query.doc,
+  (slug) => {
+    if (!slug) return
+    const doc = ruleDocs.find((item) => item.id === slug)
+    if (doc) openDoc(doc)
+  },
+  { immediate: true },
+)
 </script>
