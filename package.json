@@ -19,7 +19,9 @@
     "cap:sync": "npm run build-only && cap sync",
     "cap:copy": "npm run build-only && cap copy",
     "cap:android": "npm run cap:sync && cap open android",
-    "cap:run": "npm run cap:sync && node scripts/run-android.mjs"
+    "cap:run": "npm run cap:sync && node scripts/run-android.mjs",
+    "cap:apk": "npm run cap:sync && node scripts/build-apk.mjs",
+    "cap:apk:release": "npm run cap:sync && node scripts/build-apk.mjs release"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^8.1.0",
