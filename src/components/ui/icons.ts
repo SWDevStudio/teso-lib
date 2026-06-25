@@ -32,6 +32,11 @@ import IconUser from '~icons/lucide/user'
 import IconUsers from '~icons/lucide/users'
 import IconCopy from '~icons/lucide/copy'
 import IconRules from '~icons/game-icons/rule-book'
+import IconAlchemy from '~icons/game-icons/round-bottom-flask'
+import IconSmithing from '~icons/game-icons/anvil'
+import IconGardening from '~icons/game-icons/flower-pot'
+import IconFaith from '~icons/game-icons/prayer'
+import IconEnchanting from '~icons/game-icons/magic-swirl'
 
 export const icons = {
   creation: IconCreation,
@@ -65,6 +70,11 @@ export const icons = {
   users: IconUsers,
   copy: IconCopy,
   rules: IconRules,
+  alchemy: IconAlchemy,
+  smithing: IconSmithing,
+  gardening: IconGardening,
+  faith: IconFaith,
+  enchanting: IconEnchanting,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons
