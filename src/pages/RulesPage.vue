@@ -48,6 +48,20 @@
     </template>
 
     <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <button type="button" class="w-full text-left" @click="classesOpen = true">
+        <UiCard clickable>
+          <div class="flex items-center gap-3">
+            <UiIcon name="classes" :size="32" class="shrink-0 text-primary" />
+            <div class="min-w-0">
+              <h2 class="text-xl font-semibold">Классы</h2>
+              <p class="text-sm opacity-60">
+                {{ ruleClasses.classes.length }} классов · навыки и уровни
+              </p>
+            </div>
+          </div>
+        </UiCard>
+      </button>
+
       <button
         v-for="doc in ruleDocs"
         :key="doc.id"
@@ -73,13 +87,17 @@
     <UiModal v-model="modalOpen" :title="selectedDoc?.title">
       <RuleDoc v-if="selectedDoc" :doc="selectedDoc" :target-section-id="targetSectionId" />
     </UiModal>
+
+    <UiModal v-model="classesOpen" title="Классы">
+      <RuleClassesView v-if="classesOpen" @open-craft="onOpenCraft" />
+    </UiModal>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
 import {
+  ruleClasses,
   ruleDocs,
   type RuleDoc as RuleDocType,
   type RuleSection,
@@ -89,6 +107,7 @@ import UiCard from '@/components/ui/UiCard.vue'
 import UiModal from '@/components/ui/UiModal.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 import RuleDoc from '@/components/rules/RuleDoc.vue'
+import RuleClassesView from '@/components/rules/RuleClassesView.vue'
 
 interface SearchResult {
   doc: RuleDocType
@@ -99,6 +118,7 @@ interface SearchResult {
 const query = ref('')
 const selectedDoc = ref<RuleDocType | null>(null)
 const targetSectionId = ref<string | null>(null)
+const classesOpen = ref(false)
 
 const trimmedQuery = computed(() => query.value.trim())
 
@@ -175,15 +195,9 @@ function openResult(result: SearchResult) {
   selectedDoc.value = result.doc
 }
 
-const route = useRoute()
-
-watch(
-  () => route.query.doc,
-  (slug) => {
-    if (!slug) return
-    const doc = ruleDocs.find((item) => item.id === slug)
-    if (doc) openDoc(doc)
-  },
-  { immediate: true },
-)
+function onOpenCraft(slug: string) {
+  classesOpen.value = false
+  const doc = ruleDocs.find((item) => item.id === slug)
+  if (doc) openDoc(doc)
+}
 </script>
