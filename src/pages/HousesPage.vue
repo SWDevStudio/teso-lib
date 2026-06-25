@@ -38,7 +38,7 @@
           <div class="space-y-2">
             <div class="flex items-start justify-between gap-2">
               <div class="flex min-w-0 items-center gap-3">
-                <UiIcon name="houses" :size="28" class="shrink-0 text-primary" />
+                <UiIcon :name="house.crest ?? 'houses'" :size="28" class="shrink-0 text-primary" />
                 <div class="min-w-0">
                   <h2 class="text-xl font-semibold">{{ house.name }}</h2>
                   <p class="text-base opacity-80">

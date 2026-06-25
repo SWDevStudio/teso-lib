@@ -48,6 +48,13 @@ import IconBuilder from '~icons/game-icons/stone-wall'
 import IconManager from '~icons/game-icons/two-coins'
 import IconInnovator from '~icons/game-icons/gears'
 import IconCommander from '~icons/game-icons/rank-3'
+import IconCrestScales from '~icons/game-icons/scales'
+import IconCrestDragon from '~icons/game-icons/dragon-head'
+import IconCrestDiamond from '~icons/game-icons/cut-diamond'
+import IconCrestAntlers from '~icons/game-icons/stag-head'
+import IconCrestLion from '~icons/game-icons/lion'
+import IconCrestEagle from '~icons/game-icons/eagle-emblem'
+import IconCrestAxe from '~icons/game-icons/battle-axe'
 
 export const icons = {
   creation: IconCreation,
@@ -98,6 +105,13 @@ export const icons = {
   manager: IconManager,
   innovator: IconInnovator,
   commander: IconCommander,
+  scales: IconCrestScales,
+  dragon: IconCrestDragon,
+  diamond: IconCrestDiamond,
+  antlers: IconCrestAntlers,
+  lion: IconCrestLion,
+  eagle: IconCrestEagle,
+  axe: IconCrestAxe,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons
