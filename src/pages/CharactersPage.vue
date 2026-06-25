@@ -60,6 +60,15 @@
         </div>
         <template #actions>
           <UiButton
+            v-if="characterWithinLimits(character)"
+            variant="ghost"
+            icon
+            aria-label="Поделиться QR"
+            @click="openShare(character)"
+          >
+            <UiIcon name="qr" />
+          </UiButton>
+          <UiButton
             variant="ghost"
             icon
             :aria-label="copiedId === character.id ? 'Имя скопировано' : 'Копировать имя'"
@@ -81,18 +90,22 @@
       <form id="character-form" class="space-y-4" @submit.prevent="onSubmit">
         <UiField label="Имя" :error="errors.name" required>
           <UiInput v-model="name" :invalid="!!errors.name" placeholder="Как его знают в Тамриэле" />
+          <CharCounter :value="name" :max="LIMITS.character.name" />
         </UiField>
 
         <UiField label="Реальное имя">
           <UiInput v-model="realName" placeholder="Имя, скрытое от посторонних" />
+          <CharCounter :value="realName" :max="LIMITS.character.realName" />
         </UiField>
 
         <UiField label="Титулы">
           <UiInput v-model="title" placeholder="Звания, прозвища, регалии" />
+          <CharCounter :value="title" :max="LIMITS.character.title" />
         </UiField>
 
         <UiField label="Заметка">
           <UiTextarea v-model="note" placeholder="Что стоит помнить об этом лице" :rows="4" />
+          <CharCounter :value="note" :max="LIMITS.character.note" />
         </UiField>
 
         <UiField label="Лейблы">
@@ -105,6 +118,8 @@
         <UiButton type="submit" form="character-form">Сохранить</UiButton>
       </template>
     </UiModal>
+
+    <QrShareModal v-model="qrOpen" :source="qrSource" />
   </div>
 </template>
 
@@ -128,6 +143,9 @@ import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 import LabelFilter from '@/components/LabelFilter.vue'
 import LabelPicker from '@/components/LabelPicker.vue'
 import LabelTags from '@/components/LabelTags.vue'
+import QrShareModal, { type ShareSource } from '@/components/QrShareModal.vue'
+import CharCounter from '@/components/CharCounter.vue'
+import { TRANSFER_LIMITS as LIMITS, characterWithinLimits } from '@/lib/transfer-limits'
 
 interface CharacterForm {
   name: string
@@ -176,6 +194,14 @@ function onLabelDeleted(id: number) {
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const selectedLabelIds = ref<number[]>([])
+
+const qrOpen = ref(false)
+const qrSource = ref<ShareSource | null>(null)
+
+function openShare(character: Character) {
+  qrSource.value = { kind: 'character', character }
+  qrOpen.value = true
+}
 
 const { handleSubmit, errors, defineField, resetForm } = useForm<CharacterForm>({
   initialValues: { name: '', realName: '', title: '', note: '' },

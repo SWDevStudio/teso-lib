@@ -49,6 +49,15 @@
         <LabelTags :ids="note.labelIds" class="pt-1" />
         <p class="mt-2 text-sm opacity-70">{{ formatDate(note.updated_at) }}</p>
         <template #actions>
+          <UiButton
+            v-if="noteWithinLimits(note)"
+            variant="ghost"
+            icon
+            aria-label="Поделиться QR"
+            @click="openShare(note)"
+          >
+            <UiIcon name="qr" />
+          </UiButton>
           <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(note)">
             <UiIcon name="edit" />
           </UiButton>
@@ -63,9 +72,16 @@
       <form id="note-form" class="space-y-4" @submit.prevent="onSubmit">
         <UiField label="Заголовок" :error="errors.title">
           <UiInput v-model="title" placeholder="Необязательно" :invalid="!!errors.title" />
+          <CharCounter :value="title" :max="LIMITS.note.title" />
         </UiField>
         <UiField label="Текст" :error="errors.body" required>
-          <UiTextarea v-model="body" :rows="6" placeholder="Изложи свою мысль" :invalid="!!errors.body" />
+          <UiTextarea
+            v-model="body"
+            :rows="6"
+            placeholder="Изложи свою мысль"
+            :invalid="!!errors.body"
+          />
+          <CharCounter :value="body" :max="LIMITS.note.body" />
         </UiField>
         <UiField label="Лейблы">
           <LabelPicker v-model="selectedLabelIds" @deleted="onLabelDeleted" />
@@ -76,6 +92,8 @@
         <UiButton type="submit" form="note-form" :loading="loading">Сохранить</UiButton>
       </template>
     </UiModal>
+
+    <QrShareModal v-model="qrOpen" :source="qrSource" />
   </section>
 </template>
 
@@ -98,6 +116,9 @@ import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 import LabelFilter from '@/components/LabelFilter.vue'
 import LabelPicker from '@/components/LabelPicker.vue'
 import LabelTags from '@/components/LabelTags.vue'
+import QrShareModal, { type ShareSource } from '@/components/QrShareModal.vue'
+import CharCounter from '@/components/CharCounter.vue'
+import { TRANSFER_LIMITS as LIMITS, noteWithinLimits } from '@/lib/transfer-limits'
 
 const store = useNotesStore()
 const labelsStore = useLabelsStore()
@@ -124,6 +145,14 @@ function onLabelDeleted(id: number) {
 const modalOpen = ref(false)
 const editingId = ref<number | null>(null)
 const selectedLabelIds = ref<number[]>([])
+
+const qrOpen = ref(false)
+const qrSource = ref<ShareSource | null>(null)
+
+function openShare(note: Note) {
+  qrSource.value = { kind: 'note', note }
+  qrOpen.value = true
+}
 
 const { handleSubmit, errors, defineField, resetForm } = useForm<{ title: string; body: string }>({
   initialValues: { title: '', body: '' },

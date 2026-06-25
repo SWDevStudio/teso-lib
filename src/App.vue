@@ -3,6 +3,7 @@
     <input id="nav-drawer" v-model="drawerOpen" type="checkbox" class="drawer-toggle" />
 
     <UiConfirm />
+    <QrScanModal v-model="scanOpen" />
 
     <div class="drawer-content flex min-h-screen flex-col bg-base-200 text-base-content">
       <header
@@ -53,7 +54,10 @@
           </ul>
         </nav>
 
-        <div class="navbar-end">
+        <div class="navbar-end gap-1">
+          <UiButton variant="ghost" icon aria-label="Сканировать QR" @click="scanOpen = true">
+            <UiIcon name="scan" :size="22" />
+          </UiButton>
           <div class="dropdown dropdown-end">
             <div
               tabindex="0"
@@ -110,7 +114,7 @@
       </main>
 
       <footer class="border-t border-base-300 px-4 py-6 text-center text-sm opacity-70">
-        <p>Tamriel Codex · справочник по миру The Elder Scrolls</p>
+        <p>Tamriel Codex · Created by KB Someday</p>
       </footer>
     </div>
 
@@ -156,9 +160,12 @@ import { navLinks } from '@/router'
 import { useTheme } from '@/composables/useTheme'
 import { useBackHandler } from '@/composables/useBackButton'
 import UiIcon from '@/components/ui/UiIcon.vue'
+import UiButton from '@/components/ui/UiButton.vue'
 import UiConfirm from '@/components/UiConfirm.vue'
+import QrScanModal from '@/components/QrScanModal.vue'
 
 const drawerOpen = ref(false)
+const scanOpen = ref(false)
 const { theme, themeOptions } = useTheme()
 
 function closeDrawer() {

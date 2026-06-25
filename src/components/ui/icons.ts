@@ -31,6 +31,8 @@ import IconMoon from '~icons/lucide/moon'
 import IconUser from '~icons/lucide/user'
 import IconUsers from '~icons/lucide/users'
 import IconCopy from '~icons/lucide/copy'
+import IconQr from '~icons/lucide/qr-code'
+import IconScan from '~icons/lucide/scan-line'
 import IconRules from '~icons/game-icons/rule-book'
 import IconAlchemy from '~icons/game-icons/round-bottom-flask'
 import IconSmithing from '~icons/game-icons/anvil'
@@ -78,6 +80,8 @@ export const icons = {
   user: IconUser,
   users: IconUsers,
   copy: IconCopy,
+  qr: IconQr,
+  scan: IconScan,
   rules: IconRules,
   alchemy: IconAlchemy,
   smithing: IconSmithing,
