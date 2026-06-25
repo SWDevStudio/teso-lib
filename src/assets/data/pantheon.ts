@@ -3,12 +3,15 @@ export interface DeityName {
   name: string
 }
 
+export type DeityNature = 'aedra' | 'daedra' | 'ancestor' | 'lorkhan'
+
 export interface Deity {
   id: string
   altmerName: string
   otherNames: DeityName[]
   revered: boolean
   category: 'good' | 'bad'
+  nature: DeityNature
   domain: string
   oneLine: string
   shortDesc: string
@@ -18,6 +21,7 @@ export interface Deity {
 export const deities: Deity[] = [
   {
     id: 'auri-el',
+    nature: 'aedra',
     altmerName: 'Аури-Эль',
     otherNames: [
       {
@@ -49,6 +53,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'trinimac',
+    nature: 'aedra',
     altmerName: 'Тринимак',
     otherNames: [
       {
@@ -72,6 +77,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'magnus',
+    nature: 'aedra',
     altmerName: 'Магнус',
     otherNames: [
       {
@@ -95,6 +101,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'syrabane',
+    nature: 'ancestor',
     altmerName: 'Сирабейн',
     otherNames: [
       {
@@ -114,6 +121,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'phynaster',
+    nature: 'ancestor',
     altmerName: 'Финастер',
     otherNames: [
       {
@@ -133,6 +141,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'xarxes',
+    nature: 'aedra',
     altmerName: 'Ксарксес',
     otherNames: [
       {
@@ -152,6 +161,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'mara',
+    nature: 'aedra',
     altmerName: 'Мара',
     otherNames: [
       {
@@ -179,6 +189,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'stendarr',
+    nature: 'aedra',
     altmerName: 'Стендарр',
     otherNames: [
       {
@@ -202,6 +213,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'yffre',
+    nature: 'aedra',
     altmerName: "Й'ффре",
     otherNames: [
       {
@@ -225,6 +237,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'lorkhan',
+    nature: 'lorkhan',
     altmerName: 'Лоркхан (Похититель, Бог-Труп)',
     otherNames: [
       {
@@ -268,6 +281,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'malacath',
+    nature: 'daedra',
     altmerName: 'Малакат (павший Тринимак)',
     otherNames: [
       {
@@ -299,6 +313,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'boethiah',
+    nature: 'daedra',
     altmerName: 'Боэтия (Поглотившая Тринимака)',
     otherNames: [
       {
@@ -326,6 +341,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'molag-bal',
+    nature: 'daedra',
     altmerName: 'Молаг Бал',
     otherNames: [
       {
@@ -353,6 +369,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'mehrunes-dagon',
+    nature: 'daedra',
     altmerName: 'Мерунес Дагон',
     otherNames: [
       {
@@ -380,6 +397,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'mephala',
+    nature: 'daedra',
     altmerName: 'Мефала',
     otherNames: [
       {
@@ -407,6 +425,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'namira',
+    nature: 'daedra',
     altmerName: 'Намира',
     otherNames: [
       {
@@ -430,6 +449,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'vaermina',
+    nature: 'daedra',
     altmerName: 'Вермина',
     otherNames: [
       {
@@ -453,6 +473,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'sheogorath',
+    nature: 'daedra',
     altmerName: 'Шеогорат',
     otherNames: [
       {
@@ -480,6 +501,7 @@ export const deities: Deity[] = [
   },
   {
     id: 'hermaeus-mora',
+    nature: 'daedra',
     altmerName: 'Хермеус Мора',
     otherNames: [
       {
