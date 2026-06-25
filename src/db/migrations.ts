@@ -4,7 +4,7 @@ export const DB_NAME = 'teso'
 
 // Текущая версия схемы. Поднимайте на +1 и добавляйте новый объект в `upgrades`,
 // когда нужно изменить схему или долить данные у уже установленных приложений.
-export const DB_VERSION = 3
+export const DB_VERSION = 4
 
 // Версионные миграции. Каждый объект применяется один раз, когда БД доходит до его toVersion.
 // statements[] выполняются по порядку.
@@ -80,6 +80,30 @@ export const upgrades: capSQLiteVersionUpgrade[] = [
         note_id  INTEGER NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
         label_id INTEGER NOT NULL REFERENCES labels(id) ON DELETE CASCADE,
         PRIMARY KEY (note_id, label_id)
+      );`,
+    ],
+  },
+  {
+    toVersion: 4,
+    statements: [
+      // Квенты — жизнеописания, управляемые пользователем (добавление/удаление).
+      // Встроенные квенты сеются один раз при первом запуске (см. seedBuiltinQuentas).
+      `CREATE TABLE IF NOT EXISTS quentas (
+        id         INTEGER PRIMARY KEY AUTOINCREMENT,
+        name       TEXT NOT NULL,
+        race       TEXT NOT NULL DEFAULT '',
+        birth      TEXT NOT NULL DEFAULT '',
+        origin     TEXT NOT NULL DEFAULT '',
+        summary    TEXT NOT NULL DEFAULT '',
+        body       TEXT NOT NULL DEFAULT '',
+        is_builtin INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );`,
+
+      // Служебные ключ-значение флаги (например, что встроенные данные уже посеяны).
+      `CREATE TABLE IF NOT EXISTS app_meta (
+        key   TEXT PRIMARY KEY,
+        value TEXT
       );`,
     ],
   },
