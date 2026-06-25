@@ -1,3 +1,5 @@
+import type { IconName } from '@/components/ui/icons'
+
 export type HouseRegion =
   | 'morrowind'
   | 'cyrodiil'
@@ -20,6 +22,7 @@ export interface House {
   seat: string
   sphere: string
   colors: string
+  crest?: IconName
   era: string
   status: string
   fallen: boolean
@@ -50,6 +53,7 @@ export const regionLabel: Record<HouseRegion, string> = {
 export const houses: House[] = [
   {
     id: 'hlaalu',
+    crest: 'scales',
     name: 'Дом Хлаалу',
     nameEn: 'House Hlaalu',
     race: 'Данмеры',
@@ -231,6 +235,7 @@ export const houses: House[] = [
   },
   {
     id: 'reman',
+    crest: 'dragon',
     name: 'Династия Реманов',
     nameEn: 'Reman Dynasty',
     race: 'Сиро-нордлинги (предки имперцев)',
@@ -255,6 +260,7 @@ export const houses: House[] = [
   },
   {
     id: 'akaviri-potentate',
+    crest: 'dragon',
     name: 'Акавирский Потентат',
     nameEn: 'Akaviri Potentate',
     race: 'Цаэски (акавирцы)',
@@ -278,6 +284,7 @@ export const houses: House[] = [
   },
   {
     id: 'septim',
+    crest: 'diamond',
     name: 'Династия Септимов',
     nameEn: 'Septim Dynasty',
     race: 'Имперцы',
@@ -302,6 +309,7 @@ export const houses: House[] = [
   },
   {
     id: 'longhouse-emperors',
+    crest: 'antlers',
     name: 'Императоры Длинного Дома',
     nameEn: 'Longhouse Emperors',
     race: 'Предельцы (рикмены)',
@@ -419,6 +427,7 @@ export const houses: House[] = [
   },
   {
     id: 'cumberland',
+    crest: 'lion',
     name: 'Дом Камберленд (Уэйрест)',
     nameEn: 'House Cumberland',
     race: 'Бретонцы',
@@ -464,6 +473,7 @@ export const houses: House[] = [
   },
   {
     id: 'alinor',
+    crest: 'eagle',
     name: 'Дом Алинора',
     nameEn: 'Altmer Monarchy of Alinor',
     race: 'Альтмеры',
@@ -536,6 +546,7 @@ export const houses: House[] = [
   },
   {
     id: 'ysgramor',
+    crest: 'axe',
     name: 'Род Исграмора',
     nameEn: 'Line of Ysgramor',
     race: 'Норды',
