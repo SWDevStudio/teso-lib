@@ -18,7 +18,7 @@
       </div>
     </header>
 
-    <UiCard>
+    <UiCard v-if="translatorUnlocked">
       <div class="space-y-4">
         <div class="space-y-1">
           <h2 class="text-lg font-semibold">Начертай по-древнему</h2>
@@ -115,7 +115,7 @@
 
         <div class="space-y-2">
           <h4 class="text-sm font-semibold uppercase tracking-wide opacity-70">Начертания</h4>
-          <AlphabetTable :font="selected.font" />
+          <AlphabetTable :font="selected.font" @glyph-click="onGlyphClick" />
         </div>
 
         <div class="divider my-1" />
@@ -147,9 +147,15 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import GlyphText from '@/components/GlyphText.vue'
 import AlphabetTable from '@/components/AlphabetTable.vue'
+import { useAutoTranslator } from '@/composables/useAutoTranslator'
+import { useConfirm } from '@/composables/useConfirm'
 
 const sample = ref('')
 const sampleText = computed(() => sample.value.trim() || 'Тамриэль')
+
+const { translatorUnlocked, unlock } = useAutoTranslator()
+const { confirm } = useConfirm()
+const secretTaps = ref(0)
 
 const selected = ref<Alphabet | null>(null)
 const originalOpen = ref(false)
@@ -163,6 +169,26 @@ const modalOpen = computed({
 
 function open(alphabet: Alphabet) {
   selected.value = alphabet
+  secretTaps.value = 0
+}
+
+function onGlyphClick(char: string) {
+  if (translatorUnlocked.value || selected.value?.id !== 'daedric') return
+  if (char !== 'А') {
+    secretTaps.value = 0
+    return
+  }
+  secretTaps.value += 1
+  if (secretTaps.value < 5) return
+  secretTaps.value = 0
+  unlock()
+  void confirm({
+    title: 'Открыт автопереводчик',
+    message:
+      'Ты пять раз коснулся даэдрической «А» — и древний знак поддался. В разделе «Алфавиты» открыт переводчик: впиши слово всеобщим — и узри его рукою айлейдов, двемеров, данмеров и драконов.',
+    confirmText: 'Отлично',
+    hideCancel: true,
+  })
 }
 
 const route = useRoute()

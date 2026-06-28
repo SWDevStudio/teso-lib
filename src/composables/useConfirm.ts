@@ -6,6 +6,7 @@ export interface ConfirmOptions {
   confirmText?: string
   cancelText?: string
   danger?: boolean
+  hideCancel?: boolean
 }
 
 const isOpen = ref(false)

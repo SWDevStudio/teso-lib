@@ -11,7 +11,7 @@
         <h3 v-if="options.title" class="text-lg font-semibold">{{ options.title }}</h3>
         <p class="py-2 opacity-90">{{ options.message }}</p>
         <div class="modal-action">
-          <UiButton variant="ghost" @click="respond(false)">
+          <UiButton v-if="!options.hideCancel" variant="ghost" @click="respond(false)">
             {{ options.cancelText ?? 'Отмена' }}
           </UiButton>
           <UiButton :variant="options.danger ? 'error' : 'primary'" @click="respond(true)">

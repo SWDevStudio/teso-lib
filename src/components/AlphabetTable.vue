@@ -7,6 +7,7 @@
           v-for="char in row.chars"
           :key="char"
           class="flex flex-col items-center gap-1 rounded-md border border-base-300 bg-base-200 px-1 pb-2 pt-1.5"
+          @click="emit('glyphClick', char)"
         >
           <span class="text-xs leading-none opacity-50">{{ char }}</span>
           <GlyphText :text="char" :font="font" class="text-3xl" />
@@ -21,4 +22,5 @@ import { alphabetRows } from '@/assets/data/alphabets'
 import GlyphText from './GlyphText.vue'
 
 defineProps<{ font: string }>()
+const emit = defineEmits<{ glyphClick: [char: string] }>()
 </script>
