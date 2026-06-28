@@ -10,8 +10,13 @@
     </header>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <RouterLink v-for="card in navCards" :key="card.routeName" :to="{ name: card.routeName }">
-        <UiCard clickable>
+      <RouterLink
+        v-for="card in navCards"
+        :key="card.routeName"
+        :to="{ name: card.routeName }"
+        class="h-full"
+      >
+        <UiCard clickable class="h-full">
           <div class="flex items-center gap-4">
             <UiIcon :name="card.icon" :size="40" class="shrink-0 text-primary" />
             <div class="min-w-0 grow">
