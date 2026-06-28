@@ -99,6 +99,16 @@ function createWindow() {
     return { action: 'deny' }
   })
 
+  if (!app.isPackaged) win.webContents.openDevTools()
+
+  win.webContents.on('before-input-event', (_e, input) => {
+    const toggleDevTools =
+      input.type === 'keyDown' &&
+      (input.key === 'F12' ||
+        (input.control && input.shift && input.key.toLowerCase() === 'i'))
+    if (toggleDevTools) win.webContents.toggleDevTools()
+  })
+
   win.once('ready-to-show', () => {
     win.maximize()
     win.show()
