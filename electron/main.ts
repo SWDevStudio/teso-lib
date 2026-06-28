@@ -79,8 +79,8 @@ function registerAppProtocol() {
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 480,
-    height: 900,
+    width: 1200,
+    height: 820,
     minWidth: 360,
     minHeight: 560,
     show: false,
@@ -99,8 +99,12 @@ function createWindow() {
     return { action: 'deny' }
   })
 
-  win.once('ready-to-show', () => win.show())
-  void win.loadURL(`${ORIGIN}/index.html`)
+  win.once('ready-to-show', () => {
+    win.maximize()
+    win.show()
+  })
+
+  void win.loadURL(`${ORIGIN}/`)
   return win
 }
 
