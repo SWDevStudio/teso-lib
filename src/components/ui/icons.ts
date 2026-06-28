@@ -65,6 +65,8 @@ import IconHerald from '~icons/game-icons/newspaper'
 import IconAd from '~icons/game-icons/megaphone'
 import IconChronicles from '~icons/game-icons/sands-of-time'
 import IconCycles from '~icons/game-icons/book-pile'
+import IconEconomy from '~icons/game-icons/coins'
+import IconOriginals from '~icons/game-icons/papers'
 
 export const icons = {
   creation: IconCreation,
@@ -133,6 +135,8 @@ export const icons = {
   megaphone: IconAd,
   chronicles: IconChronicles,
   cycles: IconCycles,
+  economy: IconEconomy,
+  originals: IconOriginals,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons

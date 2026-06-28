@@ -91,18 +91,22 @@
           </div>
         </UiCard>
       </button>
+
+      <button type="button" class="w-full text-left" @click="openOriginals">
+        <UiCard clickable>
+          <div class="flex items-center gap-3">
+            <UiIcon name="originals" :size="32" class="shrink-0 text-primary" />
+            <div class="min-w-0">
+              <h2 class="text-xl font-semibold">Оригиналы</h2>
+              <p class="text-sm opacity-60">Исходные страницы документов</p>
+            </div>
+          </div>
+        </UiCard>
+      </button>
     </div>
 
     <UiModal v-model="modalOpen" :title="selectedDoc?.title">
-      <template v-if="selectedDoc">
-        <RuleDoc :doc="selectedDoc" :target-section-id="targetSectionId" />
-        <div v-if="selectedDoc.id === 'quick'" class="mt-4 border-t border-base-300 pt-4">
-          <UiButton variant="ghost" outline class="w-full" @click="originalOpen = true">
-            <UiIcon name="search" :size="18" />
-            Открыть оригинал
-          </UiButton>
-        </div>
-      </template>
+      <RuleDoc v-if="selectedDoc" :doc="selectedDoc" :target-section-id="targetSectionId" />
     </UiModal>
 
     <UiModal v-model="classesOpen" title="Классы">
@@ -113,24 +117,53 @@
       />
     </UiModal>
 
-    <UiModal v-model="originalOpen" title="Краткое руководство — оригинал">
-      <div class="space-y-3">
-        <p class="text-sm opacity-70">Оригинальные страницы правил — на случай расхождений.</p>
-        <a
-          v-for="(src, index) in quickGuideImages"
-          :key="src"
-          :href="src"
-          target="_blank"
-          rel="noopener"
-          class="block"
+    <UiModal v-model="originalsModalOpen" :title="originalsTitle">
+      <div v-if="!originalDoc" class="space-y-2">
+        <p class="text-sm opacity-70">Выбери документ, чтобы посмотреть оригинальные страницы.</p>
+        <button
+          v-for="doc in docsWithOriginals"
+          :key="doc.id"
+          type="button"
+          class="w-full text-left"
+          @click="viewOriginal(doc)"
         >
-          <img
-            :src="src"
-            :alt="pageAlt(index)"
-            class="w-full rounded-lg border border-base-300"
-            loading="lazy"
-          />
-        </a>
+          <UiCard clickable>
+            <div class="flex items-center gap-3">
+              <UiIcon :name="doc.icon" :size="24" class="shrink-0 text-primary" />
+              <div class="min-w-0 grow">
+                <h3 class="font-semibold">{{ doc.title }}</h3>
+                <p class="text-sm opacity-60">{{ originalLabel(doc) }}</p>
+              </div>
+              <UiIcon name="chevron-right" :size="18" class="shrink-0 opacity-50" />
+            </div>
+          </UiCard>
+        </button>
+      </div>
+
+      <div v-else class="space-y-3">
+        <UiButton variant="ghost" size="sm" @click="backToOriginalsList">
+          <UiIcon name="chevron-left" :size="18" />
+          К списку
+        </UiButton>
+        <PdfViewer v-if="currentPdf" :key="currentPdf" :src="currentPdf" />
+        <template v-else>
+          <p class="text-sm opacity-70">Оригинальные страницы документа — на случай расхождений.</p>
+          <a
+            v-for="(src, index) in originalImages"
+            :key="src"
+            :href="src"
+            target="_blank"
+            rel="noopener"
+            class="block"
+          >
+            <img
+              :src="src"
+              :alt="pageAlt(index)"
+              class="w-full rounded-lg border border-base-300"
+              loading="lazy"
+            />
+          </a>
+        </template>
       </div>
     </UiModal>
   </section>
@@ -152,7 +185,9 @@ import UiButton from '@/components/ui/UiButton.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 import RuleDoc from '@/components/rules/RuleDoc.vue'
 import RuleClassesView from '@/components/rules/RuleClassesView.vue'
-import { quickGuide, quickGuideImages } from '@/assets/data/quick-guide'
+import PdfViewer from '@/components/rules/PdfViewer.vue'
+import { quickGuide } from '@/assets/data/quick-guide'
+import { ruleOriginalPdfs } from '@/assets/data/rule-originals'
 
 interface SearchResult {
   doc: RuleDocType
@@ -167,7 +202,8 @@ const selectedDoc = ref<RuleDocType | null>(null)
 const targetSectionId = ref<string | null>(null)
 const targetClassId = ref<string | null>(null)
 const classesOpen = ref(false)
-const originalOpen = ref(false)
+const originalsOpen = ref(false)
+const originalDoc = ref<RuleDocType | null>(null)
 
 const trimmedQuery = computed(() => query.value.trim())
 
@@ -180,6 +216,54 @@ const modalOpen = computed({
     }
   },
 })
+
+const originalsModalOpen = computed({
+  get: () => originalsOpen.value,
+  set: (value: boolean) => {
+    originalsOpen.value = value
+    if (!value) originalDoc.value = null
+  },
+})
+
+const docsWithOriginals = computed(() =>
+  [quickGuide, ...ruleDocs].filter(
+    (doc) => ruleOriginalPdfs[doc.id] != null || doc.originalImages.length > 0,
+  ),
+)
+const currentPdf = computed(() =>
+  originalDoc.value ? (ruleOriginalPdfs[originalDoc.value.id] ?? null) : null,
+)
+const originalImages = computed(() => originalDoc.value?.originalImages ?? [])
+const originalsTitle = computed(() =>
+  originalDoc.value ? `${originalDoc.value.title} — оригинал` : 'Оригиналы',
+)
+
+function openOriginals() {
+  originalDoc.value = null
+  originalsOpen.value = true
+}
+
+function viewOriginal(doc: RuleDocType) {
+  originalDoc.value = doc
+}
+
+function backToOriginalsList() {
+  originalDoc.value = null
+}
+
+function pageWord(count: number) {
+  const mod10 = count % 10
+  const mod100 = count % 100
+  if (mod10 === 1 && mod100 !== 11) return 'страница'
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'страницы'
+  return 'страниц'
+}
+
+function originalLabel(doc: RuleDocType) {
+  if (ruleOriginalPdfs[doc.id]) return 'PDF'
+  const count = doc.originalImages.length
+  return `${count} ${pageWord(count)}`
+}
 
 function escapeHtml(value: string) {
   return value.replace(
@@ -239,7 +323,7 @@ function docMeta(doc: RuleDocType) {
 }
 
 function pageAlt(index: number) {
-  return `Краткое руководство — страница ${index + 1}`
+  return `${originalDoc.value?.title ?? 'Документ'} — страница ${index + 1}`
 }
 
 function openDoc(doc: RuleDocType) {
