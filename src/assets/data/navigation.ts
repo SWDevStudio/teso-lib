@@ -60,13 +60,14 @@ export const sections: Section[] = [
     component: () => import('@/pages/NotesPage.vue'),
   },
   {
-    name: 'quentas',
-    path: '/quentas',
-    label: 'Квенты',
-    title: 'Квенты',
-    description: 'Жизнеописания героев Тамриэля',
-    icon: 'quenta',
-    component: () => import('@/pages/QuentasPage.vue'),
+    name: 'alphabets',
+    path: '/alphabets',
+    label: 'Алфавиты',
+    title: 'Алфавиты Тамриэля',
+    description:
+      'Древние письмена старших народов: айлейдское, двемерское, даэдрическое и драконье',
+    icon: 'alphabets',
+    component: () => import('@/pages/AlphabetsPage.vue'),
   },
   {
     name: 'houses',
@@ -87,14 +88,13 @@ export const sections: Section[] = [
     component: () => import('@/pages/TamrielGuidePage.vue'),
   },
   {
-    name: 'alphabets',
-    path: '/alphabets',
-    label: 'Алфавиты',
-    title: 'Алфавиты Тамриэля',
-    description:
-      'Древние письмена старших народов: айлейдское, двемерское, даэдрическое и драконье',
-    icon: 'alphabets',
-    component: () => import('@/pages/AlphabetsPage.vue'),
+    name: 'quentas',
+    path: '/quentas',
+    label: 'Квенты',
+    title: 'Квенты',
+    description: 'Жизнеописания героев Тамриэля',
+    icon: 'quenta',
+    component: () => import('@/pages/QuentasPage.vue'),
   },
   {
     name: 'towers',
