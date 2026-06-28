@@ -61,6 +61,10 @@ import IconAyleid from '~icons/game-icons/crystal-cluster'
 import IconDwemer from '~icons/game-icons/cog'
 import IconDaedric from '~icons/game-icons/pentacle'
 import IconDragon from '~icons/game-icons/triple-claws'
+import IconHerald from '~icons/game-icons/newspaper'
+import IconAd from '~icons/game-icons/megaphone'
+import IconChronicles from '~icons/game-icons/sands-of-time'
+import IconCycles from '~icons/game-icons/book-pile'
 
 export const icons = {
   creation: IconCreation,
@@ -124,6 +128,11 @@ export const icons = {
   'script-dwemer': IconDwemer,
   'script-daedric': IconDaedric,
   'script-dragon': IconDragon,
+  herald: IconHerald,
+  newspaper: IconHerald,
+  megaphone: IconAd,
+  chronicles: IconChronicles,
+  cycles: IconCycles,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons

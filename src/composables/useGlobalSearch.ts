@@ -7,6 +7,9 @@ import { locations } from '@/assets/data/tamriel'
 import { houses } from '@/assets/data/houses'
 import { alphabets } from '@/assets/data/alphabets'
 import { creation } from '@/assets/data/creation'
+import { newsArticles, heraldRegionLabel } from '@/assets/data/herald'
+import { chronicles } from '@/assets/data/chronicles'
+import { cycleDocs, cycleTypeLabel } from '@/assets/data/cycledocs'
 import {
   ruleClasses,
   ruleDocs,
@@ -163,6 +166,44 @@ function buildStaticEntries(): SearchEntry[] {
         alphabet.fullText,
       ].join(' '),
       to: { name: 'alphabets', query: { open: alphabet.id } },
+    })
+  }
+
+  for (const article of newsArticles) {
+    out.push({
+      id: `herald:${article.id}`,
+      kind: 'Тамриэльский вестник',
+      icon: article.icon,
+      title: article.title,
+      subtitle: heraldRegionLabel[article.region],
+      text: [article.title, article.lede, heraldRegionLabel[article.region], article.fullText].join(
+        ' ',
+      ),
+      to: { name: 'news', query: { tab: 'herald', open: article.id } },
+    })
+  }
+
+  for (const chronicle of chronicles) {
+    out.push({
+      id: `chronicles:${chronicle.id}`,
+      kind: 'История и слухи',
+      icon: 'chronicles',
+      title: chronicle.title,
+      subtitle: 'История и слухи',
+      text: [chronicle.title, chronicle.teaser, chronicle.fullText].join(' '),
+      to: { name: 'news', query: { tab: 'chronicles', open: chronicle.id } },
+    })
+  }
+
+  for (const doc of cycleDocs) {
+    out.push({
+      id: `cycle:${doc.id}`,
+      kind: 'Онлайн-циклы',
+      icon: 'cycles',
+      title: doc.title,
+      subtitle: cycleTypeLabel[doc.type],
+      text: [doc.title, doc.source, doc.lede, doc.fullText].join(' '),
+      to: { name: 'news', query: { tab: 'cycles', open: doc.id } },
     })
   }
 

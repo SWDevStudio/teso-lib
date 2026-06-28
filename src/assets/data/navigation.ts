@@ -60,6 +60,15 @@ export const sections: Section[] = [
     component: () => import('@/pages/NotesPage.vue'),
   },
   {
+    name: 'news',
+    path: '/news',
+    label: 'Вести',
+    title: 'Вести Тамриэля',
+    description: 'Выпуски «Тамриэльского вестника» и летопись слухов по годам Четвёртой эры',
+    icon: 'herald',
+    component: () => import('@/pages/NewsPage.vue'),
+  },
+  {
     name: 'alphabets',
     path: '/alphabets',
     label: 'Алфавиты',
