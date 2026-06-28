@@ -1,6 +1,6 @@
 <template>
-  <button type="button" class="w-full text-left" @click="emit('open', tower)">
-    <UiCard clickable>
+  <button type="button" class="h-full w-full text-left" @click="emit('open', tower)">
+    <UiCard clickable class="h-full">
       <div class="space-y-2">
         <div class="flex items-start justify-between gap-2">
           <div class="flex min-w-0 items-center gap-3">
