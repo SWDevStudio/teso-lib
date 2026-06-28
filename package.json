@@ -26,7 +26,8 @@
     "electron:icon": "node scripts/make-icon.mjs",
     "electron:compile": "esbuild electron/main.ts electron/preload.ts --bundle --platform=node --target=node20 --format=cjs --external:electron --outdir=dist-electron --out-extension:.js=.cjs",
     "electron:build": "npm run build && npm run electron:compile",
-    "electron:dev": "npm run electron:build && electron .",
+    "electron:dev": "node scripts/electron-dev.mjs",
+    "electron:preview": "npm run electron:build && electron .",
     "electron:dist": "npm run electron:icon && npm run electron:build && electron-builder --win portable"
   },
   "dependencies": {

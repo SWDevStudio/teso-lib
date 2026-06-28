@@ -104,8 +104,7 @@ function createWindow() {
   win.webContents.on('before-input-event', (_e, input) => {
     const toggleDevTools =
       input.type === 'keyDown' &&
-      (input.key === 'F12' ||
-        (input.control && input.shift && input.key.toLowerCase() === 'i'))
+      (input.key === 'F12' || (input.control && input.shift && input.key.toLowerCase() === 'i'))
     if (toggleDevTools) win.webContents.toggleDevTools()
   })
 
@@ -114,7 +113,16 @@ function createWindow() {
     win.show()
   })
 
-  void win.loadURL(`${ORIGIN}/`)
+  const devServerUrl = process.env.VITE_DEV_SERVER_URL
+  if (devServerUrl) {
+    let attempts = 0
+    win.webContents.on('did-fail-load', () => {
+      if (attempts++ < 20) setTimeout(() => void win.loadURL(devServerUrl), 300)
+    })
+    void win.loadURL(devServerUrl)
+  } else {
+    void win.loadURL(`${ORIGIN}/`)
+  }
   return win
 }
 
