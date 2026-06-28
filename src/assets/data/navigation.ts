@@ -87,6 +87,16 @@ export const sections: Section[] = [
     component: () => import('@/pages/TamrielGuidePage.vue'),
   },
   {
+    name: 'alphabets',
+    path: '/alphabets',
+    label: 'Алфавиты',
+    title: 'Алфавиты Тамриэля',
+    description:
+      'Древние письмена старших народов: айлейдское, двемерское, даэдрическое и драконье',
+    icon: 'alphabets',
+    component: () => import('@/pages/AlphabetsPage.vue'),
+  },
+  {
     name: 'towers',
     path: '/towers',
     label: 'Башни',
