@@ -1,0 +1,20 @@
+appId: com.teso.app
+productName: Tamriel Codex
+directories:
+  output: release
+  buildResources: build
+npmRebuild: false
+files:
+  - dist-electron/**
+  - package.json
+  - '!node_modules/**'
+extraResources:
+  - from: dist
+    to: dist
+asar: true
+win:
+  icon: build/icon.ico
+  target:
+    - target: portable
+portable:
+  artifactName: TamrielCodex-${version}-portable.exe
