@@ -1,10 +1,13 @@
 import type { RuleDoc } from '@/assets/data/rules.generated'
 
+export const quickGuideImages = ['/quick-guide/1.jpg', '/quick-guide/2.jpg']
+
 export const quickGuide: RuleDoc = {
   id: 'quick',
   title: 'Краткое руководство',
   version: '1.0',
   icon: 'codex',
+  originalImages: quickGuideImages,
   intro:
     '<p>Самые базовые правила, которые обязан знать каждый игрок. Если что-то непонятно — вежливо спроси мастера.</p>',
   sections: [
@@ -156,5 +159,3 @@ export const quickGuide: RuleDoc = {
     },
   ],
 }
-
-export const quickGuideImages = ['/quick-guide/1.jpg', '/quick-guide/2.jpg']
