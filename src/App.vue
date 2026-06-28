@@ -5,6 +5,7 @@
     <UiConfirm />
     <QrScanModal v-model="scanOpen" />
     <GlobalSearch v-model="searchOpen" />
+    <RulesGateModal />
 
     <div class="drawer-content flex min-h-screen flex-col bg-base-200 text-base-content">
       <header
@@ -168,6 +169,7 @@ import UiButton from '@/components/ui/UiButton.vue'
 import UiConfirm from '@/components/UiConfirm.vue'
 import QrScanModal from '@/components/QrScanModal.vue'
 import GlobalSearch from '@/components/GlobalSearch.vue'
+import RulesGateModal from '@/components/RulesGateModal.vue'
 
 const drawerOpen = ref(false)
 const scanOpen = ref(false)
