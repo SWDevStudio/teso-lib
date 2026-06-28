@@ -3,8 +3,8 @@
     <header class="space-y-2">
       <h1 class="text-3xl font-bold text-primary">Пантеон богов</h1>
       <p class="opacity-80">
-        Глазами Высокого народа: те, кого мы чтим как предков-духов, и те, кого отвергаем как
-        порождения обмана и распада.
+        Глазами Высокого народа и по слову Праксис-королевы Алинора: священные покровители Нирна и
+        почитаемые духи предков, силы лишь терпимые в домашней молитве — и те, чьё имя под запретом.
       </p>
     </header>
 
@@ -20,26 +20,17 @@
 
     <div role="tablist" class="tabs tabs-box">
       <button
+        v-for="tab in tabs"
+        :key="tab.id"
         type="button"
         role="tab"
         class="tab gap-2"
-        :class="{ 'tab-active': activeCategory === 'good' }"
-        :aria-selected="activeCategory === 'good'"
-        @click="activeCategory = 'good'"
+        :class="{ 'tab-active': activeTab === tab.id }"
+        :aria-selected="activeTab === tab.id"
+        @click="activeTab = tab.id"
       >
-        <UiIcon name="good" />
-        Почитаемые
-      </button>
-      <button
-        type="button"
-        role="tab"
-        class="tab gap-2"
-        :class="{ 'tab-active': activeCategory === 'bad' }"
-        :aria-selected="activeCategory === 'bad'"
-        @click="activeCategory = 'bad'"
-      >
-        <UiIcon name="bad" />
-        Отвергнутые
+        <UiIcon :name="tabIcon[tab.id]" />
+        {{ tab.label }}
       </button>
     </div>
 
@@ -55,15 +46,15 @@
         v-for="deity in filteredDeities"
         :key="deity.id"
         type="button"
-        class="w-full text-left"
+        class="h-full w-full text-left"
         @click="open(deity)"
       >
-        <UiCard clickable>
+        <UiCard clickable class="h-full">
           <div class="space-y-2">
             <div class="flex items-start justify-between gap-2">
               <div class="flex min-w-0 items-center gap-3">
                 <UiIcon
-                  :name="deity.category === 'good' ? 'good' : 'bad'"
+                  :name="tabIcon[rankToTab[deity.rank]]"
                   :size="28"
                   class="shrink-0 text-primary"
                 />
@@ -73,8 +64,8 @@
                 </div>
               </div>
               <div class="flex shrink-0 flex-col items-end gap-1">
-                <UiBadge :color="deity.revered ? 'success' : 'error'" size="sm">
-                  {{ deity.revered ? 'Почитаем' : 'Отвергнут' }}
+                <UiBadge :color="rankMeta[deity.rank].color" size="sm">
+                  {{ rankMeta[deity.rank].label }}
                 </UiBadge>
                 <UiBadge :color="natureMeta[deity.nature].color" size="sm">
                   {{ natureMeta[deity.nature].label }}
@@ -101,8 +92,8 @@
     <UiModal v-model="modalOpen" :title="selected?.altmerName">
       <div v-if="selected" class="space-y-4">
         <div class="flex flex-wrap items-center gap-3">
-          <UiBadge :color="selected.revered ? 'success' : 'error'">
-            {{ selected.revered ? 'Почитаем' : 'Отвергнут' }}
+          <UiBadge :color="rankMeta[selected.rank].color">
+            {{ rankMeta[selected.rank].label }}
           </UiBadge>
           <UiBadge :color="natureMeta[selected.nature].color">
             {{ natureMeta[selected.nature].label }}
@@ -140,8 +131,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { goodDeities, badDeities, type Deity, type DeityNature } from '@/assets/data/pantheon'
+import {
+  deities,
+  rankToTab,
+  type Deity,
+  type DeityNature,
+  type DeityRank,
+  type PantheonTab,
+} from '@/assets/data/pantheon'
 import type { BadgeColor } from '@/components/ui/types'
+import type { IconName } from '@/components/ui/icons'
 import UiIcon from '@/components/ui/UiIcon.vue'
 import UiCard from '@/components/ui/UiCard.vue'
 import UiBadge from '@/components/ui/UiBadge.vue'
@@ -149,17 +148,37 @@ import UiModal from '@/components/ui/UiModal.vue'
 import UiMarkdown from '@/components/ui/UiMarkdown.vue'
 import UiEmptyState from '@/components/ui/UiEmptyState.vue'
 
-type Category = 'good' | 'bad'
-
 const natureMeta: Record<DeityNature, { label: string; color: BadgeColor }> = {
   aedra: { label: 'Аэдра', color: 'info' },
   daedra: { label: 'Даэдра', color: 'warning' },
   ancestor: { label: 'Предок-герой', color: 'accent' },
   lorkhan: { label: 'Бог-Труп', color: 'neutral' },
+  celestial: { label: 'Небесная сила', color: 'secondary' },
+  mortal: { label: 'Человекобог', color: 'ghost' },
+  trickster: { label: 'Бог-плут', color: 'neutral' },
 }
 
+const rankMeta: Record<DeityRank, { label: string; color: BadgeColor }> = {
+  sacred: { label: 'Священный', color: 'success' },
+  venerated: { label: 'Почитаемый', color: 'primary' },
+  tolerated: { label: 'Терпимый', color: 'accent' },
+  forbidden: { label: 'Запретный', color: 'error' },
+}
+
+const tabIcon: Record<PantheonTab, IconName> = {
+  revered: 'good',
+  tolerated: 'faith',
+  forbidden: 'bad',
+}
+
+const tabs: { id: PantheonTab; label: string }[] = [
+  { id: 'revered', label: 'Почитаемые' },
+  { id: 'tolerated', label: 'Терпимые' },
+  { id: 'forbidden', label: 'Запретные' },
+]
+
 const query = ref('')
-const activeCategory = ref<Category>('good')
+const activeTab = ref<PantheonTab>('revered')
 const selected = ref<Deity | null>(null)
 
 const modalOpen = computed({
@@ -169,7 +188,9 @@ const modalOpen = computed({
   },
 })
 
-const sourceDeities = computed(() => (activeCategory.value === 'good' ? goodDeities : badDeities))
+const sourceDeities = computed(() =>
+  deities.filter((deity) => rankToTab[deity.rank] === activeTab.value),
+)
 
 const filteredDeities = computed(() => {
   const needle = query.value.trim().toLowerCase()
@@ -187,9 +208,9 @@ watch(
   () => route.query.open,
   (openId) => {
     if (!openId) return
-    const deity = [...goodDeities, ...badDeities].find((item) => item.id === openId)
+    const deity = deities.find((item) => item.id === openId)
     if (!deity) return
-    activeCategory.value = deity.category
+    activeTab.value = rankToTab[deity.rank]
     open(deity)
   },
   { immediate: true },
