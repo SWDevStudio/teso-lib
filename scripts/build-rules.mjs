@@ -29,6 +29,7 @@ const HEADING_BY_ID = [
 
 const DOCS = [
   { file: 'Obschie_pravila_TES-2026_v2_2.docx', slug: 'obschie', title: 'Общие правила', version: '2.2', icon: 'rules', styleMap: HEADING_BY_ID },
+  { file: '1_Pravila_po_ekonomike_v1_6_1_5.docx', slug: 'economy', title: 'Экономика', version: '1.6', icon: 'economy' },
   { file: 'Pravila_Alkhimia_TES-2026_v1_0.docx', slug: 'alchemy', title: 'Алхимия', version: '1.0', icon: 'alchemy' },
   { file: 'Pravila_Kuznechestvo_i_Yuvelirka_TES-2026_v1_0.docx', slug: 'smithing', title: 'Кузнечество и ювелирка', version: '1.0', icon: 'smithing' },
   { file: 'Pravila_SadovodstvoTES-2026_v2_0.docx', slug: 'gardening', title: 'Садоводство', version: '2.0', icon: 'gardening' },
@@ -232,7 +233,7 @@ const processed = []
 for (const doc of DOCS) processed.push(await processDoc(doc))
 
 let ruleClasses = null
-const docs = processed.map(({ doc, rootNodes, intro }) => {
+const docs = processed.map(({ doc, rootNodes, intro, imageCount }) => {
   const nextId = makeCounter(doc.slug)
   if (doc.slug === 'obschie') ruleClasses = extractClasses(rootNodes)
   return {
@@ -241,6 +242,10 @@ const docs = processed.map(({ doc, rootNodes, intro }) => {
     version: doc.version,
     icon: doc.icon,
     intro,
+    originalImages: Array.from(
+      { length: imageCount },
+      (_, i) => `/rules/${doc.slug}/${i + 1}.webp`,
+    ),
     sections: rootNodes.map((node) => serializeSection(node, nextId)),
   }
 })
@@ -274,6 +279,7 @@ export interface RuleDoc {
   version: string
   icon: IconName
   intro: string
+  originalImages: string[]
   sections: RuleSection[]
 }
 
