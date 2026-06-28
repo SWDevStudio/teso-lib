@@ -142,3 +142,30 @@
     letter-spacing: 0.01em;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Ancient scripts — substitution fonts that map Cyrillic letters to the
+   glyphs of Tamriel's writing systems. They carry only uppercase forms, so
+   any element using them must apply `text-transform: uppercase`.
+   Consumed by the «Алфавиты» section via the `font` field of each alphabet.
+   ────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Ayleidis';
+  src: url('./fonts/Ayledis.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Dwemeris';
+  src: url('./fonts/Dvemerskiy.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Daedric';
+  src: url('./fonts/Daedricheskiy.ttf') format('truetype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Dovahzul';
+  src: url('./fonts/Drakoniy.ttf') format('truetype');
+  font-display: swap;
+}

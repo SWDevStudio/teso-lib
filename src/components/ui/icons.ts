@@ -33,6 +33,7 @@ import IconUsers from '~icons/lucide/users'
 import IconCopy from '~icons/lucide/copy'
 import IconQr from '~icons/lucide/qr-code'
 import IconScan from '~icons/lucide/scan-line'
+import IconImage from '~icons/lucide/image'
 import IconRules from '~icons/game-icons/rule-book'
 import IconAlchemy from '~icons/game-icons/round-bottom-flask'
 import IconSmithing from '~icons/game-icons/anvil'
@@ -55,6 +56,11 @@ import IconCrestAntlers from '~icons/game-icons/stag-head'
 import IconCrestLion from '~icons/game-icons/lion'
 import IconCrestEagle from '~icons/game-icons/eagle-emblem'
 import IconCrestAxe from '~icons/game-icons/battle-axe'
+import IconAlphabets from '~icons/game-icons/stone-tablet'
+import IconAyleid from '~icons/game-icons/crystal-cluster'
+import IconDwemer from '~icons/game-icons/cog'
+import IconDaedric from '~icons/game-icons/pentacle'
+import IconDragon from '~icons/game-icons/triple-claws'
 
 export const icons = {
   creation: IconCreation,
@@ -89,6 +95,7 @@ export const icons = {
   copy: IconCopy,
   qr: IconQr,
   scan: IconScan,
+  image: IconImage,
   rules: IconRules,
   alchemy: IconAlchemy,
   smithing: IconSmithing,
@@ -112,6 +119,11 @@ export const icons = {
   lion: IconCrestLion,
   eagle: IconCrestEagle,
   axe: IconCrestAxe,
+  alphabets: IconAlphabets,
+  'script-ayleid': IconAyleid,
+  'script-dwemer': IconDwemer,
+  'script-daedric': IconDaedric,
+  'script-dragon': IconDragon,
 } satisfies Record<string, Component>
 
 export type IconName = keyof typeof icons

@@ -5,6 +5,7 @@ import { deities } from '@/assets/data/pantheon'
 import { towers } from '@/assets/data/towers'
 import { locations } from '@/assets/data/tamriel'
 import { houses } from '@/assets/data/houses'
+import { alphabets } from '@/assets/data/alphabets'
 import { creation } from '@/assets/data/creation'
 import {
   ruleClasses,
@@ -140,6 +141,28 @@ function buildStaticEntries(): SearchEntry[] {
         house.fullText,
       ].join(' '),
       to: { name: 'houses', query: { open: house.id } },
+    })
+  }
+
+  for (const alphabet of alphabets) {
+    out.push({
+      id: `alphabets:${alphabet.id}`,
+      kind: 'Алфавиты',
+      icon: alphabet.icon,
+      title: alphabet.name,
+      subtitle: alphabet.langName,
+      text: [
+        alphabet.name,
+        alphabet.nameEn,
+        alphabet.langName,
+        alphabet.peoples,
+        alphabet.region,
+        alphabet.era,
+        alphabet.oneLine,
+        alphabet.shortDesc,
+        alphabet.fullText,
+      ].join(' '),
+      to: { name: 'alphabets', query: { open: alphabet.id } },
     })
   }
 
