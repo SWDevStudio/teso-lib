@@ -120,6 +120,7 @@
 
       <footer class="border-t border-base-300 px-4 py-6 text-center text-sm opacity-70">
         <p>Tamriel Codex · Created by KB Someday</p>
+        <p class="mt-1 text-xs opacity-60">сборка {{ buildVersion }}</p>
       </footer>
     </div>
 
@@ -174,6 +175,7 @@ import RulesGateModal from '@/components/RulesGateModal.vue'
 const drawerOpen = ref(false)
 const scanOpen = ref(false)
 const searchOpen = ref(false)
+const buildVersion = import.meta.env.VITE_BUILD_VERSION ?? 'dev'
 const { theme, themeOptions } = useTheme()
 
 function closeDrawer() {

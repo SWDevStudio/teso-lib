@@ -24,6 +24,7 @@
     "cap:run": "npm run cap:sync && node scripts/run-android.mjs",
     "cap:apk": "npm run cap:sync && node scripts/build-apk.mjs",
     "cap:apk:release": "npm run cap:sync && node scripts/build-apk.mjs release",
+    "build:all": "node scripts/build-all.mjs",
     "electron:icon": "node scripts/make-icon.mjs",
     "electron:compile": "esbuild electron/main.ts electron/preload.ts --bundle --platform=node --target=node20 --format=cjs --external:electron --outdir=dist-electron --out-extension:.js=.cjs",
     "electron:build": "npm run build && npm run electron:compile",
