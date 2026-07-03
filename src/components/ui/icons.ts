@@ -34,6 +34,7 @@ import IconCopy from '~icons/lucide/copy'
 import IconQr from '~icons/lucide/qr-code'
 import IconScan from '~icons/lucide/scan-line'
 import IconImage from '~icons/lucide/image'
+import IconCamera from '~icons/lucide/camera'
 import IconRules from '~icons/game-icons/rule-book'
 import IconAlchemy from '~icons/game-icons/round-bottom-flask'
 import IconSmithing from '~icons/game-icons/anvil'
@@ -102,6 +103,7 @@ export const icons = {
   qr: IconQr,
   scan: IconScan,
   image: IconImage,
+  camera: IconCamera,
   rules: IconRules,
   alchemy: IconAlchemy,
   smithing: IconSmithing,
