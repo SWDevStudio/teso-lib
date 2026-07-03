@@ -14,7 +14,7 @@
         <div class="navbar-start gap-1">
           <label
             for="nav-drawer"
-            class="btn btn-ghost btn-sm min-h-11 min-w-11 cursor-pointer px-2 md:hidden"
+            class="btn btn-ghost btn-sm min-h-11 min-w-11 cursor-pointer px-2"
             aria-label="Открыть меню"
           >
             <svg
@@ -44,17 +44,6 @@
             <span class="text-lg font-semibold tracking-wide">Tamriel Codex</span>
           </RouterLink>
         </div>
-
-        <nav class="navbar-center hidden md:flex">
-          <ul class="menu menu-horizontal gap-1">
-            <li v-for="link in navLinks" :key="link.name">
-              <RouterLink :to="{ name: link.name }">
-                <UiIcon :name="link.icon" />
-                {{ link.label }}
-              </RouterLink>
-            </li>
-          </ul>
-        </nav>
 
         <div class="navbar-end gap-1">
           <UiButton variant="ghost" icon aria-label="Поиск по всему" @click="searchOpen = true">
