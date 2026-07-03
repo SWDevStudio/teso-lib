@@ -47,49 +47,91 @@
 
     <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <UiCard v-for="character in filteredCharacters" :key="character.id">
-        <div class="space-y-2">
-          <h3 class="text-xl font-semibold">
+        <div>
+          <button
+            v-if="!isDesktop"
+            type="button"
+            class="flex min-h-11 w-full items-center gap-2 text-left"
+            :aria-expanded="isExpanded(character.id)"
+            @click="toggle(character.id)"
+          >
+            <span class="min-w-0 flex-1 text-xl font-semibold">
+              <span v-if="character.title" class="font-normal opacity-80"
+                >{{ character.title }}
+              </span>
+              {{ character.name }}
+            </span>
+            <svg
+              class="size-5 shrink-0 opacity-60 transition-transform"
+              :class="isExpanded(character.id) ? 'rotate-180' : ''"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <h3 v-else class="text-xl font-semibold">
             <span v-if="character.title" class="font-normal opacity-80"
               >{{ character.title }}
             </span>
             {{ character.name }}
           </h3>
-          <p v-if="character.note" class="whitespace-pre-wrap opacity-90">{{ character.note }}</p>
-          <p v-if="character.real_name" class="text-sm opacity-60">
-            Истинное имя: {{ character.real_name }}
-          </p>
-          <LabelTags :ids="character.labelIds" class="pt-1" />
+
+          <div
+            class="grid transition-[grid-template-rows] duration-200 ease-out"
+            :class="isDesktop || isExpanded(character.id) ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+          >
+            <div class="overflow-hidden">
+              <div class="space-y-2 pt-2">
+                <p v-if="character.note" class="whitespace-pre-wrap opacity-90">
+                  {{ character.note }}
+                </p>
+                <p v-if="character.real_name" class="text-sm opacity-60">
+                  Истинное имя: {{ character.real_name }}
+                </p>
+                <LabelTags :ids="character.labelIds" class="pt-1" />
+                <div class="card-actions justify-end">
+                  <UiButton
+                    v-if="characterWithinLimits(character)"
+                    variant="ghost"
+                    icon
+                    aria-label="Поделиться QR"
+                    @click="openShare(character)"
+                  >
+                    <UiIcon name="qr" />
+                  </UiButton>
+                  <UiButton
+                    variant="ghost"
+                    icon
+                    :aria-label="copiedId === character.id ? 'Имя скопировано' : 'Копировать имя'"
+                    @click="copyName(character)"
+                  >
+                    <UiIcon :name="copiedId === character.id ? 'check' : 'copy'" />
+                  </UiButton>
+                  <UiButton
+                    variant="ghost"
+                    icon
+                    aria-label="Изменить"
+                    @click="openEdit(character.id)"
+                  >
+                    <UiIcon name="edit" />
+                  </UiButton>
+                  <UiButton
+                    variant="ghost"
+                    icon
+                    aria-label="Удалить"
+                    @click="removeCharacter(character.id)"
+                  >
+                    <UiIcon name="trash" />
+                  </UiButton>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <template #actions>
-          <UiButton
-            v-if="characterWithinLimits(character)"
-            variant="ghost"
-            icon
-            aria-label="Поделиться QR"
-            @click="openShare(character)"
-          >
-            <UiIcon name="qr" />
-          </UiButton>
-          <UiButton
-            variant="ghost"
-            icon
-            :aria-label="copiedId === character.id ? 'Имя скопировано' : 'Копировать имя'"
-            @click="copyName(character)"
-          >
-            <UiIcon :name="copiedId === character.id ? 'check' : 'copy'" />
-          </UiButton>
-          <UiButton variant="ghost" icon aria-label="Изменить" @click="openEdit(character.id)">
-            <UiIcon name="edit" />
-          </UiButton>
-          <UiButton
-            variant="ghost"
-            icon
-            aria-label="Удалить"
-            @click="removeCharacter(character.id)"
-          >
-            <UiIcon name="trash" />
-          </UiButton>
-        </template>
       </UiCard>
     </div>
 
@@ -135,7 +177,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useForm } from 'vee-validate'
-import { useClipboard } from '@vueuse/core'
+import { useClipboard, useBreakpoints, breakpointsTailwind } from '@vueuse/core'
 import { useConfirm } from '@/composables/useConfirm'
 import { useCharactersStore } from '@/stores/characters'
 import { useLabelsStore } from '@/stores/labels'
@@ -166,6 +208,19 @@ const route = useRoute()
 const charactersStore = useCharactersStore()
 const labelsStore = useLabelsStore()
 const { characters, loading } = storeToRefs(charactersStore)
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const isDesktop = breakpoints.greaterOrEqual('md')
+const expandedIds = ref<Set<number>>(new Set())
+
+function isExpanded(id: number) {
+  return expandedIds.value.has(id)
+}
+
+function toggle(id: number) {
+  if (expandedIds.value.has(id)) expandedIds.value.delete(id)
+  else expandedIds.value.add(id)
+}
 
 const { copy } = useClipboard()
 const copiedId = ref<number | null>(null)
