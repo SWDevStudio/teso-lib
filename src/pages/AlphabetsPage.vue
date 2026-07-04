@@ -153,7 +153,7 @@ import { useConfirm } from '@/composables/useConfirm'
 const sample = ref('')
 const sampleText = computed(() => sample.value.trim() || 'Тамриэль')
 
-const { translatorUnlocked, unlock } = useAutoTranslator()
+const { translatorUnlocked, toggle } = useAutoTranslator()
 const { confirm } = useConfirm()
 const secretTaps = ref(0)
 
@@ -173,7 +173,7 @@ function open(alphabet: Alphabet) {
 }
 
 function onGlyphClick(char: string) {
-  if (translatorUnlocked.value || selected.value?.id !== 'daedric') return
+  if (selected.value?.id !== 'daedric') return
   if (char !== 'А') {
     secretTaps.value = 0
     return
@@ -181,12 +181,14 @@ function onGlyphClick(char: string) {
   secretTaps.value += 1
   if (secretTaps.value < 5) return
   secretTaps.value = 0
-  unlock()
+  const wasUnlocked = translatorUnlocked.value
+  toggle()
   void confirm({
-    title: 'Открыт автопереводчик',
-    message:
-      'Ты пять раз коснулся даэдрической «А» — и древний знак поддался. В разделе «Алфавиты» открыт переводчик: впиши слово всеобщим — и узри его рукою айлейдов, двемеров, данмеров и драконов.',
-    confirmText: 'Отлично',
+    title: wasUnlocked ? 'Автопереводчик сокрыт' : 'Открыт автопереводчик',
+    message: wasUnlocked
+      ? 'Ты вновь пять раз коснулся даэдрической «А» — и переводчик сокрылся, будто его и не было. Позовёшь его тем же тайным касанием.'
+      : 'Ты пять раз коснулся даэдрической «А» — и древний знак поддался. В разделе «Алфавиты» открыт переводчик: впиши слово всеобщим — и узри его рукою айлейдов, двемеров, данмеров и драконов.',
+    confirmText: wasUnlocked ? 'Пусть будет так' : 'Отлично',
     hideCancel: true,
   })
 }

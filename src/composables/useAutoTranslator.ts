@@ -3,8 +3,8 @@ import { useStorage } from '@vueuse/core'
 const translatorUnlocked = useStorage('teso-translator-unlocked', false)
 
 export function useAutoTranslator() {
-  function unlock() {
-    translatorUnlocked.value = true
+  function toggle() {
+    translatorUnlocked.value = !translatorUnlocked.value
   }
-  return { translatorUnlocked, unlock }
+  return { translatorUnlocked, toggle }
 }
