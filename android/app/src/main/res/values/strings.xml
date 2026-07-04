@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">teso-lib</string>
-    <string name="title_activity_main">teso-lib</string>
+    <string name="app_name">Tamriel Codex</string>
+    <string name="title_activity_main">Tamriel Codex</string>
     <string name="package_name">com.teso.app</string>
     <string name="custom_url_scheme">com.teso.app</string>
 </resources>
